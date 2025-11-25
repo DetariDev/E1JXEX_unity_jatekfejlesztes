@@ -12,17 +12,14 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         input = new InputSystemActions();
     }
-
     private void OnEnable()
     {
         input.Player.Enable();
     }
-
     private void OnDisable()
     {
         input.Player.Disable();
     }
-
     void Update()
     {
         moveInput = input.Player.Move.ReadValue<Vector2>();
