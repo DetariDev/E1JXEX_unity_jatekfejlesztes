@@ -9,20 +9,21 @@ public class PlayerAim : MonoBehaviour
     public Vector3 lastPosition;
     [SerializeField] private float gamepadCursorSpeed = 1500f;
     private InputSystemActions.PlayerActions playerInput;
+    private InputManager inputManager;
     private Camera mainCamera;
     private Vector2 virtualCursorPos;
-    private bool isGamepadMode = false;
     private Vector3 lastGamepadPos;
     private void Awake()
     {
-        playerInput = InputManager.instance.input.Player;
+        inputManager = InputManager.instance;
+        playerInput = inputManager.input.Player;
         mainCamera = Camera.main;
         lastPosition = new Vector2();
     }
     private void Update()
     {
         HandleInputSwitch();
-        if (isGamepadMode)
+        if (inputManager.isGamepadMode)
         {
             MoveTargetToGamepad();
         }
@@ -36,13 +37,13 @@ public class PlayerAim : MonoBehaviour
     private void HandleInputSwitch()
     {
         Vector2 gamepadInput = playerInput.Look.ReadValue<Vector2>();
-        if (gamepadInput.magnitude >0 && isGamepadMode == false)
+        if (gamepadInput.magnitude >0 && inputManager.isGamepadMode == false)
         {
-            isGamepadMode = true;
+            inputManager.isGamepadMode = true;
         }
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            isGamepadMode = false;
+            inputManager.isGamepadMode = false;
         }
     }
 

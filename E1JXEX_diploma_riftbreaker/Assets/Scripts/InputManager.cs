@@ -7,6 +7,8 @@ public class InputManager : MonoBehaviour
 
     [Foldout("Input példány")]
     public InputSystemActions input;
+
+    public bool isGamepadMode = false;
     private void Awake()
     {
         if (instance != null && instance != this)
