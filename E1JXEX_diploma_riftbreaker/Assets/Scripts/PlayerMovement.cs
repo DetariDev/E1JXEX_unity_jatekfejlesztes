@@ -4,26 +4,21 @@ public class PlayerMovement : MonoBehaviour
 {
     public PlayerManager playerManager;
     private Rigidbody rb;
-    private InputSystemActions input;
     private Vector2 moveInput;
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        input = new InputSystemActions();
-    }
-    private void OnEnable()
-    {
-        input.Player.Enable();
-    }
-    private void OnDisable()
-    {
-        input.Player.Disable();
     }
     void Update()
     {
-        moveInput = input.Player.Move.ReadValue<Vector2>();
-        playerManager.HandleStamina(input.Player.Sprint.IsPressed(), moveInput.magnitude > 0.1f);
+        moveInput =InputManager.instance.input.Player.Move.ReadValue<Vector2>();
+        if (InputManager.instance.input.Player.Sprint.triggered)
+        {
+            playerManager.sprintToggle = !playerManager.sprintToggle;
+        }
+        playerManager.HandleStamina(moveInput.magnitude > 0.1f);
     }
 
     void FixedUpdate()

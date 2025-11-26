@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     [Foldout("Állapotjelzõk")]
     public bool isRunning = false;
     public bool staminaDrained;
+    public bool sprintToggle;
 
     private void Awake()
     {
@@ -41,9 +42,9 @@ public class PlayerManager : MonoBehaviour
         currentStamina = maxStamina;
     }
 
-    public void HandleStamina(bool sprintInput, bool isMoving)
+    public void HandleStamina(bool isMoving)
     {
-        if (sprintInput && isMoving && currentStamina > 0 && !staminaDrained)
+        if (sprintToggle && isMoving && currentStamina > 0 && !staminaDrained)
         {
             isRunning = true;
             currentStamina -= staminaDrainRate * Time.deltaTime;
@@ -51,6 +52,7 @@ public class PlayerManager : MonoBehaviour
             {
                 staminaDrained = true;
                 isRunning = false;
+                sprintToggle = false;
             }
         }
         else
