@@ -15,5 +15,6 @@ public class Weapon : ScriptableObject
     public float fireRate;
     public float range;
     public float projectilespeed;
+    public int projectileCount = 1;
     public GameObject projectilePrefab;
 }

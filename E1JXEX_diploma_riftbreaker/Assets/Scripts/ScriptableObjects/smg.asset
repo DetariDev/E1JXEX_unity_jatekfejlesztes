@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e97939d4dd59d8e41bb9b2912b17eab1, type: 3}
-  m_Name: Pistol
+  m_Name: smg
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  weaponType: 1
-  weaponName: Basic Pistol
+  weaponType: 0
+  weaponName: basic SMG
   damage: 1
-  fireRate: 0.5
+  fireRate: 0.1
   range: 100
-  projectilespeed: 5
+  projectilespeed: 2
   projectileCount: 1
   projectilePrefab: {fileID: 2599172278568131718, guid: 69ab19ddd8acdac4ab5312611123c908, type: 3}

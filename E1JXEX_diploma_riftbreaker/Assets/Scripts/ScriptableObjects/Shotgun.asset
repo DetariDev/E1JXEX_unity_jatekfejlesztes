@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e97939d4dd59d8e41bb9b2912b17eab1, type: 3}
-  m_Name: Pistol
+  m_Name: Shotgun
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  weaponType: 1
-  weaponName: Basic Pistol
+  weaponType: 2
+  weaponName: Basic Shotgun
   damage: 1
-  fireRate: 0.5
+  fireRate: 1
   range: 100
-  projectilespeed: 5
-  projectileCount: 1
+  projectilespeed: 8
+  projectileCount: 5
   projectilePrefab: {fileID: 2599172278568131718, guid: 69ab19ddd8acdac4ab5312611123c908, type: 3}

@@ -8,7 +8,7 @@ public class WeaponManager : MonoBehaviour
     [Foldout("Fegyver")]
     public Weapon currentWeapon;
     public Transform weaponPos;
-    
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -20,12 +20,20 @@ public class WeaponManager : MonoBehaviour
             instance = this;
         }
     }
+
     public void Shoot()
     {
-        GameObject Projectile =Instantiate(currentWeapon.projectilePrefab,weaponPos.position,weaponPos.rotation,null);
-        Rigidbody prb = Projectile.GetComponent<Rigidbody>();
-        prb.AddForce(weaponPos.forward * currentWeapon.projectilespeed);
-        Destroy(Projectile, 5f);
+        for (int i = 0; i < currentWeapon.projectileCount; i++)
+        {
+            Quaternion spread = weaponPos.rotation;
+            if (currentWeapon.projectileCount > 1)
+            {
+                spread = Quaternion.Euler(0, Random.Range(-15f, 15f), 0) * spread;
+            }
+            GameObject Projectile = Instantiate(currentWeapon.projectilePrefab, weaponPos.position, spread, null);
+            Rigidbody prb = Projectile.GetComponent<Rigidbody>();
+            prb.AddForce(spread * Vector3.forward * currentWeapon.projectilespeed, ForceMode.Impulse);
+            Destroy(Projectile, 5f);
+        }
     }
-
 }
