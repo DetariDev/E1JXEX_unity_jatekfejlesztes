@@ -8,22 +8,13 @@ public class PlayerInteraction : MonoBehaviour
 
     private InputSystemActions.PlayerActions playerInput;
     private Camera cam;
-
     private void Start()
     {
         if (!playerAim) playerAim = GetComponent<PlayerAim>();
         playerInput = InputManager.instance.input.Player;
+        InputManager.instance.input.Player.Interact.performed += _ => TryInteract();
         cam = Camera.main;
     }
-
-    private void Update()
-    {
-        if (playerInput.Interact.WasPerformedThisFrame())
-        {
-            TryInteract();
-        }
-    }
-
     private void TryInteract()
     {
         if (!playerAim.aimTarget) return;
