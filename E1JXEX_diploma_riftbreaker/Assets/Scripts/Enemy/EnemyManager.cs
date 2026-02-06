@@ -20,7 +20,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void AlertNearbyEnemies(EnemyBase spotter, Transform target)
+    public void AlertNearbyEnemies(EnemyBase spotter, GameObject target)
     {
         float rangeSqr = spotter.detectRange * spotter.detectRange;
         Vector3 spotterPos = spotter.transform.position;

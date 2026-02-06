@@ -19,7 +19,7 @@ public class EnemyBase : MonoBehaviour
     public float detectRange = 15.0f;
     public EnemyState currentState = EnemyState.Idle;
     NavMeshAgent agent;
-    public Transform target;
+    public GameObject target;
 
     private void Awake()
     {
@@ -27,24 +27,73 @@ public class EnemyBase : MonoBehaviour
         agent.speed = speed;
         EnemyManager.instance.enemies.Add(this);
     }
+
     private void OnDestroy()
     {
         EnemyManager.instance.enemies.Remove(this);
     }
+
     void Start()
     {
         StartCoroutine(RandomPosition());
     }
 
+    void Update()
+    {
+        if (currentState == EnemyState.Chase && target == null)
+        {
+            currentState = EnemyState.Idle;
+        }
 
-    public void SetTarget(Transform foundTarget)
+        FindTarget();
+
+        if (currentState == EnemyState.Chase && target != null)
+        {
+            agent.SetDestination(target.transform.position);
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= attackRange)
+            {
+                //currentState = EnemyState.Attack;
+            }
+        }
+    }
+
+    public void FindTarget()
+    {
+        if (currentState == EnemyState.Idle)
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position, detectRange);
+            GameObject closestTarget = null;
+            float closestDistance = Mathf.Infinity;
+
+            foreach (var hit in hits)
+            {
+                if (hit.CompareTag("Player") || hit.CompareTag("Building"))
+                {
+                    float currentDistance = Vector3.Distance(transform.position, hit.transform.position);
+                    if (currentDistance < closestDistance)
+                    {
+                        closestDistance = currentDistance;
+                        closestTarget = hit.gameObject;
+                    }
+                }
+            }
+
+            if (closestTarget != null)
+            {
+                OnTargetFound(closestTarget);
+            }
+        }
+    }
+
+    public void SetTarget(GameObject foundTarget)
     {
         target = foundTarget;
         currentState = EnemyState.Chase;
-        agent.SetDestination(foundTarget.position);
+        agent.SetDestination(target.transform.position);
     }
 
-    public void OnTargetFound(Transform target)
+    public void OnTargetFound(GameObject target)
     {
         if (currentState != EnemyState.Chase)
         {
@@ -53,18 +102,25 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    IEnumerator RandomPosition() 
+    IEnumerator RandomPosition()
     {
-        while (currentState == EnemyState.Idle)
+        while (true)
         {
-            Vector3 randomDirection = new Vector3(Random.Range(-10f,10f),0,Random.Range(-10f,10f));
-            randomDirection += transform.position;
-            NavMeshHit navHit;
-            NavMesh.SamplePosition(randomDirection, out navHit, 10f, NavMesh.AllAreas);
-            agent.SetDestination(navHit.position);
-            yield return new WaitForSeconds(Random.Range(10,20));
+            if (currentState == EnemyState.Idle)
+            {
+                Vector3 randomDirection = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
+                randomDirection += transform.position;
+                NavMeshHit navHit;
+                if (NavMesh.SamplePosition(randomDirection, out navHit, 10f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(navHit.position);
+                }
+                yield return new WaitForSeconds(Random.Range(10, 20));
+            }
+            else
+            {
+                yield return new WaitForSeconds(5f);
+            }
         }
     }
 }
-
-
