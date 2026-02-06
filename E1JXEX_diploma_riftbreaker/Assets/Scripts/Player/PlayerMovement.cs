@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
 
 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
