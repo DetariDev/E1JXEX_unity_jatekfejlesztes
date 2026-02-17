@@ -128,4 +128,24 @@ public class EnemyBase : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PlayerBullet"))
+        {
+            Projectile bullet = other.GetComponent<Projectile>();
+            TakeDamage(bullet.damage);
+            Destroy(other.gameObject);
+            OnTargetFound(bullet.owner);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health-= damage;
+        if (health<=0)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

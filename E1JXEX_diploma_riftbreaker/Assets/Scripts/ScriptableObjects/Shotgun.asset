@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   weaponType: 2
   weaponName: Basic Shotgun
-  damage: 1
+  damage: 20
   fireRate: 1
   range: 100
   projectilespeed: 15

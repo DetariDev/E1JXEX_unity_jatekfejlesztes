@@ -21,7 +21,7 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public void Shoot()
+    public void Shoot(GameObject owner)
     {
         for (int i = 0; i < currentWeapon.projectileCount; i++)
         {
@@ -31,6 +31,10 @@ public class WeaponManager : MonoBehaviour
                 spread = Quaternion.Euler(0, Random.Range(-15f, 15f), 0) * spread;
             }
             GameObject Projectile = Instantiate(currentWeapon.projectilePrefab, weaponPos.position, spread, null);
+            Projectile projectilecomponent = Projectile.GetComponent<Projectile>();
+            projectilecomponent.damage = currentWeapon.damage;
+            projectilecomponent.bulletType = currentWeapon.bulletType;
+            projectilecomponent.owner = owner;
             Rigidbody prb = Projectile.GetComponent<Rigidbody>();
             prb.AddForce(spread * Vector3.forward * currentWeapon.projectilespeed, ForceMode.Impulse);
             Destroy(Projectile, 5f);

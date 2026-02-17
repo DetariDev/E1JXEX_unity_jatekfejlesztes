@@ -24,7 +24,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (isFiring && Time.time >= nextFireTime)
         {
-            WeaponManager.instance.Shoot();
+            WeaponManager.instance.Shoot(this.gameObject);
             nextFireTime = Time.time + currentWeapon.fireRate;
         }
     }

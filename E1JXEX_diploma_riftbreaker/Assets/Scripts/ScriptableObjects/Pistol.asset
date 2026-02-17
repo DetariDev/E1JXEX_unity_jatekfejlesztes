@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   weaponType: 1
   weaponName: Basic Pistol
-  damage: 1
+  damage: 15
   fireRate: 0.5
   range: 100
   projectilespeed: 25

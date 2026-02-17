@@ -10,6 +10,7 @@ public enum WeaponType
 public class Weapon : ScriptableObject
 {
     public WeaponType weaponType;
+    public BulletType bulletType;
     public string weaponName;
     public int damage;
     public float fireRate;

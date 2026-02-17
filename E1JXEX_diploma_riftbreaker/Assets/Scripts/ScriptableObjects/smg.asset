@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   weaponType: 0
   weaponName: basic SMG
-  damage: 1
+  damage: 25
   fireRate: 0.1
   range: 100
   projectilespeed: 20
