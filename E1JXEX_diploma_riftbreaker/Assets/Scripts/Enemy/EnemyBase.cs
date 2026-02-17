@@ -50,11 +50,16 @@ public class EnemyBase : MonoBehaviour
         if (currentState == EnemyState.Chase && target != null)
         {
             agent.SetDestination(target.transform.position);
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= attackRange)
-            {
-                //currentState = EnemyState.Attack;
-            }
+            TryAttackTarget();
+        }
+    }
+
+    public void TryAttackTarget()
+    {
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= attackRange)
+        {
+            //currentState = EnemyState.Attack;
         }
     }
 

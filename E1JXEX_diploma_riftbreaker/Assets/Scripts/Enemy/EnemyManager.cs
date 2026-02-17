@@ -22,15 +22,9 @@ public class EnemyManager : MonoBehaviour
 
     public void AlertNearbyEnemies(EnemyBase spotter, GameObject target)
     {
-        float rangeSqr = spotter.detectRange * spotter.detectRange;
-        Vector3 spotterPos = spotter.transform.position;
-
-        for (int i = 0; i < enemies.Count; i++)
+        foreach (EnemyBase enemy in enemies)
         {
-            EnemyBase enemy = enemies[i];
-            if (enemy == spotter || enemy.currentState != EnemyState.Idle) continue;
-
-            if ((enemy.transform.position - spotterPos).sqrMagnitude <= rangeSqr)
+            if(Vector3.Distance(enemy.transform.position,spotter.transform.position)< enemy.detectRange * 3)
             {
                 enemy.SetTarget(target);
             }
