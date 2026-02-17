@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using VInspector;
 public enum ResourceType
 {
     Wood,
@@ -9,7 +10,8 @@ public enum ResourceType
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
-    public Dictionary<string, int> resources = new Dictionary<string, int>();
+    
+    public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     void Awake()
     {
         if (Instance == null)
@@ -27,19 +29,19 @@ public class ResourceManager : MonoBehaviour
     {
         foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
         {
-            resources.Add(type.ToString(), 0);
+            resources.Add(type, 0);
         }
     }
 
     public void AddResource(ResourceType resource, int quantity)
     {
-        resources[resource.ToString()] += quantity;
+        resources[resource] += quantity;
     }
     public bool SpendResource(ResourceType resource, int quantity)
     {
-        if (resources[resource.ToString()] >= quantity)
+        if (resources[resource] >= quantity)
         {
-            resources[resource.ToString()] -= quantity;
+            resources[resource] -= quantity;
             return true;
         }
         return false;

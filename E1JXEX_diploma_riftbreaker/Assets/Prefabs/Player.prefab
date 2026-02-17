@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3443933250633180485}
   - component: {fileID: 6877828180661911296}
   - component: {fileID: 5458535150852769660}
+  - component: {fileID: 4582582756458194025}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -97,6 +98,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &3401693558574444627
 BoxCollider:
@@ -226,6 +228,25 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &4582582756458194025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154396905690100157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f2b355f61796c42a1b18d3fe85c925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMining
+  playerAim: {fileID: 2869168371624762865}
+  miningRate: 1
+  miningAmount: 1
+  range: 4
+  mineableLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1670928422245677471
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +336,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &6114452002018135350
 BoxCollider:
