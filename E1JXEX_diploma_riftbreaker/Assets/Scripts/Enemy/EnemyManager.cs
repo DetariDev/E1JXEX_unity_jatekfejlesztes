@@ -24,7 +24,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (EnemyBase enemy in enemies)
         {
-            if(Vector3.Distance(enemy.transform.position,spotter.transform.position)< enemy.detectRange * 3)
+            if(Vector3.Distance(enemy.transform.position,spotter.transform.position)< enemy.detectRange * 3 && enemy.currentState==EnemyState.Idle)
             {
                 enemy.SetTarget(target);
             }

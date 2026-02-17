@@ -16,10 +16,16 @@ public class EnemyBase : MonoBehaviour
     public int maxHealth = 100;
     public float speed = 3.5f;
     public float attackRange = 2.0f;
+    public float attackRate = 1f;
+    private float nextAttackTime = 0f;
+    public int damage = 10;
     public float detectRange = 15.0f;
     public EnemyState currentState = EnemyState.Idle;
     NavMeshAgent agent;
     public GameObject target;
+    private IDamageable targetDamageable;
+    public float findTargetInterval = 0.5f;
+    private float findTargetTimer = 0f;
 
     private void Awake()
     {
@@ -40,17 +46,35 @@ public class EnemyBase : MonoBehaviour
 
     void Update()
     {
-        if (currentState == EnemyState.Chase && target == null)
+        findTargetTimer += Time.deltaTime;
+        if (findTargetTimer >= findTargetInterval)
         {
-            currentState = EnemyState.Idle;
+            FindTarget();
+            findTargetTimer = 0f;
         }
 
-        FindTarget();
-
-        if (currentState == EnemyState.Chase && target != null)
+        if (target == null)
         {
-            agent.SetDestination(target.transform.position);
-            TryAttackTarget();
+            currentState = EnemyState.Idle;
+            return;
+        }
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+
+        if (distance <= attackRange)
+        {
+            currentState = EnemyState.Attack;
+            agent.isStopped = true;
+            AttackTarget();
+        }
+        else
+        {
+            currentState = EnemyState.Chase;
+            agent.isStopped = false;
+
+            if (agent.isOnNavMesh && agent.isActiveAndEnabled)
+            {
+                agent.SetDestination(target.transform.position);
+            }
         }
     }
 
@@ -59,52 +83,58 @@ public class EnemyBase : MonoBehaviour
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= attackRange)
         {
-            //currentState = EnemyState.Attack;
+            agent.isStopped = true;
+            AttackTarget();
         }
+        else { currentState = EnemyState.Chase; }
     }
 
     public void FindTarget()
     {
-        if (currentState == EnemyState.Idle)
-        {
-            Collider[] hits = Physics.OverlapSphere(transform.position, detectRange);
-            GameObject closestTarget = null;
-            float closestDistance = Mathf.Infinity;
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectRange);
+        GameObject closestTarget = null;
+        float closestDistance = Mathf.Infinity;
 
-            foreach (var hit in hits)
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Player") || hit.CompareTag("Building"))
             {
-                if (hit.CompareTag("Player") || hit.CompareTag("Building"))
+                
+                float currentDistance = Vector3.Distance(transform.position, hit.transform.position);
+                if (hit.CompareTag("Player"))
                 {
-                    float currentDistance = Vector3.Distance(transform.position, hit.transform.position);
-                    if (currentDistance < closestDistance)
-                    {
-                        closestDistance = currentDistance;
-                        closestTarget = hit.gameObject;
-                    }
+                    currentDistance *= 0.5f;
+                }
+                if (currentDistance < closestDistance)
+                {
+                    closestDistance = currentDistance;
+                    closestTarget = hit.gameObject;
                 }
             }
+        }
 
-            if (closestTarget != null)
-            {
-                OnTargetFound(closestTarget);
-            }
+        if (closestTarget != null && closestTarget != target)
+        {
+            OnTargetFound(closestTarget);
         }
     }
 
     public void SetTarget(GameObject foundTarget)
     {
         target = foundTarget;
+        targetDamageable = target.GetComponent<IDamageable>();
         currentState = EnemyState.Chase;
-        agent.SetDestination(target.transform.position);
+
+        if (agent.isOnNavMesh && agent.isActiveAndEnabled)
+        {
+            agent.SetDestination(target.transform.position);
+        }
     }
 
     public void OnTargetFound(GameObject target)
     {
-        if (currentState != EnemyState.Chase)
-        {
-            SetTarget(target);
-            EnemyManager.instance.AlertNearbyEnemies(this, target);
-        }
+        SetTarget(target);
+        EnemyManager.instance.AlertNearbyEnemies(this, target);
     }
 
     IEnumerator RandomPosition()
@@ -147,5 +177,24 @@ public class EnemyBase : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    public void AttackTarget()
+    {
+        currentState = EnemyState.Attack;
+        if (Time.time >= nextAttackTime)
+        {
+            if (targetDamageable != null && targetDamageable != null)
+            {
+                targetDamageable.TakeDamage(damage);
+                nextAttackTime = Time.time + 1f / attackRate;
+            }
+            else if (target != null)
+            {
+                targetDamageable = target.GetComponent<IDamageable>();
+                if (targetDamageable == null) currentState = EnemyState.Idle;
+            }
+        }
+        
+
     }
 }
