@@ -1,23 +1,19 @@
 using UnityEngine;
-using VInspector;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    [Foldout("Base Statok")]
     public int maxHealth = 100;
     public float baseSpeed = 5f;
     public float maxStamina = 10f;
     public float staminaRegenRate = 5f;
     public float staminaDrainRate = 2f;
 
-    [Foldout("Current Statok")]
     public int currentHealth;
     public float currentSpeed;
     public float currentStamina;
 
-    [Foldout("Állapotjelzõk")]
     public bool isRunning = false;
     public bool staminaDrained;
     public bool sprintToggle;
