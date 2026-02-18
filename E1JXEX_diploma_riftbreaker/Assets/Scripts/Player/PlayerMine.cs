@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class PlayerMining : MonoBehaviour
@@ -6,7 +7,8 @@ public class PlayerMining : MonoBehaviour
     [SerializeField] private float miningRate = 1.0f;
     [SerializeField] private int miningAmount = 1;
     [SerializeField] private float range = 4.0f;
-    [SerializeField] private LayerMask mineableLayer;
+    [SerializeField] public LayerMask mineableLayer;
+    [SerializeField] private ResourceType[] mineableResources = new ResourceType[0];
 
     private float nextMineTime;
     private Camera cam;
@@ -17,6 +19,11 @@ public class PlayerMining : MonoBehaviour
         playerAim = GetComponent<PlayerAim>();
         cam = Camera.main;
         playerInput = InputManager.instance.input.Player;
+        miningRate = PlayerManager.Instance.currentDrillHead.miningRate;
+        miningAmount = PlayerManager.Instance.currentDrillHead.miningAmount;
+        range = PlayerManager.Instance.currentDrillHead.range;
+        mineableResources = PlayerManager.Instance.currentDrillHead.mineableResources;
+
     }
 
     void Update()
@@ -33,14 +40,18 @@ public class PlayerMining : MonoBehaviour
 
     private void TryMine()
     {
+
         Vector3 rayDirection = playerAim.aimTarget.position - cam.transform.position;
         if (Physics.Raycast(cam.transform.position, rayDirection, out RaycastHit hit, Mathf.Infinity, mineableLayer))
         {
-            if (Vector3.Distance(transform.position,hit.transform.position)<=range)
+            if (Vector3.Distance(transform.position, hit.transform.position) <= range)
             {
                 if (hit.collider.TryGetComponent(out Mineable mineable))
                 {
-                    mineable.Mine(miningAmount);
+                    if (mineableResources.Contains(mineable.resourceType))
+                    {
+                        mineable.Mine(miningAmount);
+                    }
                 }
             }
         }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Mineable : MonoBehaviour
 {
-    [SerializeField] private ResourceType resourceType;
+    [SerializeField] public ResourceType resourceType;
     [SerializeField] private int resourceAmount = 100;
 
     public void Mine(int amount)

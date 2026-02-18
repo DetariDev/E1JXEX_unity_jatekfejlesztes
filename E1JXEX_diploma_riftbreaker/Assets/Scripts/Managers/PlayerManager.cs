@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
     public bool staminaDrained;
     public bool sprintToggle;
 
+    public DrillHead currentDrillHead;
+    [SerializeField] public DrillHead defaultDrillHead;
     private void Awake()
     {
         if (Instance == null)
@@ -36,6 +38,7 @@ public class PlayerManager : MonoBehaviour
         currentHealth = maxHealth;
         currentSpeed = baseSpeed;
         currentStamina = maxStamina;
+        currentDrillHead = defaultDrillHead;
     }
 
     public void HandleStamina(bool isMoving)
