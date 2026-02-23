@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     public bool isRunning = false;
     public bool staminaDrained;
     public bool sprintToggle;
+    public bool inBuildState= false;
 
     public DrillHead currentDrillHead;
     [SerializeField] public DrillHead defaultDrillHead;
@@ -39,6 +41,7 @@ public class PlayerManager : MonoBehaviour
         currentSpeed = baseSpeed;
         currentStamina = maxStamina;
         currentDrillHead = defaultDrillHead;
+        InputManager.instance.input.Player.BuildToggle.performed += HandleBuilding;
     }
 
     public void HandleStamina(bool isMoving)
@@ -68,5 +71,10 @@ public class PlayerManager : MonoBehaviour
         }
 
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+    }
+
+    public void HandleBuilding(InputAction.CallbackContext context)
+    {
+        inBuildState = !inBuildState;
     }
 }

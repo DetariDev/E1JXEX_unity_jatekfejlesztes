@@ -11,8 +11,8 @@ public class WeaponPickup : MonoBehaviour, IInteractable
     }
     public void Interact()
     {
-        Weapon temp = WeaponManager.instance.currentWeapon;
-        WeaponManager.instance.currentWeapon = weapon;
+        Weapon temp = WeaponManager.instance.CurrentWeapon;
+        WeaponManager.instance.CurrentWeapon = weapon;
         weapon = temp;
         title.text = weapon.weaponName;
     }

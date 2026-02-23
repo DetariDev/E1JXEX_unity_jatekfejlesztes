@@ -3,11 +3,24 @@ public class PlayerAttack : MonoBehaviour
 {
     bool isFiring= false;
     private float nextFireTime;
-
+    WeaponManager weaponManager;
+    private Weapon currentWeapon;
+    private void Awake()
+    {
+        weaponManager = WeaponManager.instance;
+    }
+    private void Start()
+    {
+        currentWeapon = weaponManager.CurrentWeapon;
+        weaponManager.OnWeaponChanged += UpdateWeapon;
+    }
+    private void UpdateWeapon(Weapon newWeapon)
+    {
+        currentWeapon = newWeapon;
+    }
     private void Update()
     {
-        Weapon currentWeapon = WeaponManager.instance.currentWeapon;
-        if (currentWeapon == null) return;
+        if (currentWeapon == null ||PlayerManager.Instance.inBuildState) return;
         switch (currentWeapon.weaponType)
         {
             case WeaponType.auto:
@@ -24,7 +37,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (isFiring && Time.time >= nextFireTime)
         {
-            WeaponManager.instance.Shoot(this.gameObject);
+            weaponManager.Shoot(this.gameObject);
             nextFireTime = Time.time + currentWeapon.fireRate;
         }
     }

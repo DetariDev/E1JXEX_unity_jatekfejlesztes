@@ -183,7 +183,7 @@ public class EnemyBase : MonoBehaviour
         currentState = EnemyState.Attack;
         if (Time.time >= nextAttackTime)
         {
-            if (targetDamageable != null && targetDamageable != null)
+            if (targetDamageable != null)
             {
                 targetDamageable.TakeDamage(damage);
                 nextAttackTime = Time.time + 1f / attackRate;
