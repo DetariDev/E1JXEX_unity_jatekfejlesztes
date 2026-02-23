@@ -46,6 +46,17 @@ public class ResourceManager : MonoBehaviour
         }
         return false;
     }
+    public bool HasEnoughResource(ResourceType resource, int quantity)
+    {
+        if (resources[resource]>= quantity)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
 }

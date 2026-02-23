@@ -699,6 +699,7 @@ MonoBehaviour:
   isRunning: 0
   staminaDrained: 0
   sprintToggle: 0
+  inBuildState: 0
   currentDrillHead: {fileID: 11400000, guid: c46396bc8d9dc6342be8db2ee6bb4922, type: 2}
   defaultDrillHead: {fileID: 11400000, guid: c46396bc8d9dc6342be8db2ee6bb4922, type: 2}
 --- !u!4 &694209239
@@ -741,7 +742,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf3b30bc80d2c94ea208c1a74161223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  currentWeapon: {fileID: 11400000, guid: 4b64ca6f9628fc44e919c88908b3cee7, type: 2}
+  currentWeapon: {fileID: 0}
+  StartingWeapon: {fileID: 11400000, guid: 0fc3748ddd38fc548b8d24a527f80473, type: 2}
   weaponPos: {fileID: 853997429}
 --- !u!114 &694209242
 MonoBehaviour:
