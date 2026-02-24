@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 public enum UpgradeType
 {
@@ -8,6 +10,7 @@ public enum UpgradeType
     WaterSpeed,
     MiningYield
 }
+
 [Serializable]
 public struct UpgradeModifier
 {
@@ -17,5 +20,5 @@ public struct UpgradeModifier
 
 public class UpgradeRecipe : RecipeBase
 {
-    public UpgradeModifier[] modifiers;
+    public MechUpgrade itemToCraft;
 }

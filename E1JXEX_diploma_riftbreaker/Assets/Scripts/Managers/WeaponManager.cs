@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using VInspector;
+using VInspector.Libs;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -10,6 +13,7 @@ public class WeaponManager : MonoBehaviour
 
 
     [Foldout("Fegyver")]
+    public List<Weapon> availableWeapons = new List<Weapon>();
     public Weapon currentWeapon;
     public Weapon StartingWeapon;
 
@@ -40,6 +44,36 @@ public class WeaponManager : MonoBehaviour
     public void Start()
     {
         CurrentWeapon = StartingWeapon;
+        if (!availableWeapons.Contains(StartingWeapon) && StartingWeapon != null)
+        {
+            availableWeapons.Add(StartingWeapon);
+        }
+        InputManager.instance.input.Player.ChangeWeapon.performed += ChangeWeapon;
+    }
+    private int currentWeaponIndex = 0;
+
+    public void ChangeWeapon(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (availableWeapons.Count <= 1) return;
+        if (!InputManager.instance.isGamepadMode)
+        {
+            float scrollValue = context.ReadValue<Vector2>().y;
+
+            if (scrollValue > 0)
+            {
+                currentWeaponIndex = (currentWeaponIndex + 1) % availableWeapons.Count;
+            }
+            else if (scrollValue < 0)
+            {
+                currentWeaponIndex = (currentWeaponIndex - 1 + availableWeapons.Count) % availableWeapons.Count;
+            }
+            CurrentWeapon = availableWeapons[currentWeaponIndex];
+        }
+        else
+        {
+            // gamepades fegyvervaltast majd implementalni
+        }
+        
     }
 
     public void Shoot(GameObject owner)

@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface ICraftingFactory
 {
-    void craft(RecipeBase recipe);
+    void Craft(RecipeBase recipe);
 }
