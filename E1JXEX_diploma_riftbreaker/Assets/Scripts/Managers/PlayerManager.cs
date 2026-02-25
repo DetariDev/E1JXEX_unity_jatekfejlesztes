@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine.InputSystem;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
+    public event Action<bool> OnUpgradeMenuToggle;
+    public event Action<bool> OnBuildStateToggle;
 
     private int baseMaxHealth = 100;
     private float baseBaseSpeed = 5f;
@@ -25,6 +28,7 @@ public class PlayerManager : MonoBehaviour
     public bool staminaDrained;
     public bool sprintToggle;
     public bool inBuildState = false;
+    public bool inUpgradeMenu = false;
 
     public DrillHead currentDrillHead;
     [SerializeField] public DrillHead defaultDrillHead;
@@ -54,6 +58,19 @@ public class PlayerManager : MonoBehaviour
         currentStamina = maxStamina;
         currentDrillHead = defaultDrillHead;
         InputManager.instance.input.Player.BuildToggle.performed += HandleBuilding;
+        InputManager.instance.input.Player.UpgradeToggle.performed += ToggleUpgradeMenu;
+    }
+
+    private void ToggleUpgradeMenu(InputAction.CallbackContext context)
+    {
+        inUpgradeMenu = !inUpgradeMenu;
+        OnUpgradeMenuToggle?.Invoke(inUpgradeMenu);
+    }
+
+    public void HandleBuilding(InputAction.CallbackContext context)
+    {
+        inBuildState = !inBuildState;
+        OnBuildStateToggle?.Invoke(inBuildState);
     }
 
     public void HandleStamina(bool isMoving)
@@ -85,14 +102,9 @@ public class PlayerManager : MonoBehaviour
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
     }
 
-    public void HandleBuilding(InputAction.CallbackContext context)
+    public void EquipUpgrade(UpgradePlace place, MechUpgrade upgrade)
     {
-        inBuildState = !inBuildState;
-    }
-
-    public void EquipUpgrade(MechUpgrade upgrade)
-    {
-        switch (upgrade.place)
+        switch (place)
         {
             case UpgradePlace.Head:
                 headUpgrade = upgrade;

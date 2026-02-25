@@ -4,10 +4,12 @@ public class PlayerAttack : MonoBehaviour
     bool isFiring= false;
     private float nextFireTime;
     WeaponManager weaponManager;
+    PlayerManager playerManager;
     private Weapon currentWeapon;
     private void Awake()
     {
         weaponManager = WeaponManager.instance;
+        playerManager = PlayerManager.Instance;
     }
     private void Start()
     {
@@ -20,7 +22,7 @@ public class PlayerAttack : MonoBehaviour
     }
     private void Update()
     {
-        if (currentWeapon == null ||PlayerManager.Instance.inBuildState) return;
+        if (currentWeapon == null ||playerManager.inBuildState || playerManager.inUpgradeMenu) return;
         switch (currentWeapon.weaponType)
         {
             case WeaponType.auto:
