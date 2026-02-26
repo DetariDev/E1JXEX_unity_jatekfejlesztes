@@ -28,7 +28,7 @@ public class PlayerMining : MonoBehaviour
 
     void Update()
     {
-        if (playerInput.Mine.IsPressed() && !PlayerManager.Instance.inBuildState)
+        if (playerInput.Mine.IsPressed())
         {
             if (Time.time >= nextMineTime)
             {

@@ -1,38 +1,87 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class eBuildSystem : MonoBehaviour
+public class BuildSystem : MonoBehaviour
 {
-    public GameObject wallPrefab;
     public PlayerAim playerAim;
+    public BuildingRecipe currentBuildingRecipe;
+    public event Action<BuildingRecipe> OnCurrentBuildingChanged;
 
-    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>(); // O1 miatt 
+    PlayerManager playerManager;
+
+    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
+
+
 
     private void Start()
     {
-        InputManager.instance.input.Player.Attack.performed += TryBuildWall;
-    }
-
-    private void OnDestroy()
-    {
-        if (InputManager.instance != null)
+        playerManager = PlayerManager.Instance;
+        if (playerManager.unlockedBuildings.Count > 0)
         {
-            InputManager.instance.input.Player.Attack.performed -= TryBuildWall;
+            currentBuildingRecipe = PlayerManager.Instance.unlockedBuildings[0];
+            OnCurrentBuildingChanged?.Invoke(currentBuildingRecipe);
+
         }
+        InputManager.instance.input.Player.ChangeWeapon.performed += ChangeBuildingRecipe;
     }
 
-    private void TryBuildWall(InputAction.CallbackContext context)
+    private int currentBuildingIndex = 0;
+    public void ChangeBuildingRecipe(UnityEngine.InputSystem.InputAction.CallbackContext context) 
     {
-        if (!PlayerManager.Instance.inBuildState || playerAim.aimTarget == null) return;
+        if (playerManager.unlockedBuildings.Count <= 1) return;
+        if (!InputManager.instance.isGamepadMode)
+        {
+            float scrollValue = context.ReadValue<Vector2>().y;
 
+            if (scrollValue > 0)
+            {
+                currentBuildingIndex = (currentBuildingIndex + 1) % playerManager.unlockedBuildings.Count;
+            }
+            else if (scrollValue < 0)
+            {
+                currentBuildingIndex = (currentBuildingIndex - 1 + playerManager.unlockedBuildings.Count) % playerManager.unlockedBuildings.Count;
+            }
+            currentBuildingRecipe = playerManager.unlockedBuildings[currentBuildingIndex];
+        }
+        else
+        {
+            // gamepades epitesvaltast majd implementalni
+        }
+        OnCurrentBuildingChanged?.Invoke(currentBuildingRecipe);
+    }
+
+    private void Update()
+    {
+        if (!playerManager.inBuildState || playerAim.aimTarget == null || currentBuildingRecipe == null) return;
+
+        if (InputManager.instance.input.Player.Attack.IsPressed())
+        {
+            TryBuild();
+        }
+
+        
+    }
+
+    private void TryBuild()
+    {
         Vector3 targetPos = playerAim.aimTarget.position;
         Vector3 snapPos = new Vector3(Mathf.Round(targetPos.x), 0.5f, Mathf.Round(targetPos.z));
+        float distanceFromPlayer = Vector3.Distance(playerManager.playerModel.transform.position, targetPos);
+        if ( distanceFromPlayer <= 2 || distanceFromPlayer >= 10 || occupiedPositions.Contains(snapPos)) return;
 
-        if (!occupiedPositions.Contains(snapPos))
+        foreach (var resource in currentBuildingRecipe.resourceCost)
         {
-            Instantiate(wallPrefab, snapPos, Quaternion.identity);
-            occupiedPositions.Add(snapPos);
+            if (!ResourceManager.Instance.HasEnoughResource(resource.resourceType, resource.amount)) return;
         }
+
+        foreach (var resource in currentBuildingRecipe.resourceCost)
+        {
+            ResourceManager.Instance.SpendResource(resource.resourceType, resource.amount);
+        }
+
+        Instantiate(currentBuildingRecipe.buildingPrefab, snapPos, Quaternion.identity);
+        occupiedPositions.Add(snapPos);
     }
 }

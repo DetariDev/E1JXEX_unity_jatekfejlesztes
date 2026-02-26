@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VInspector;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
     public event Action<bool> OnUpgradeMenuToggle;
     public event Action<bool> OnBuildStateToggle;
+    
 
     private int baseMaxHealth = 100;
     private float baseBaseSpeed = 5f;
@@ -38,6 +40,10 @@ public class PlayerManager : MonoBehaviour
     public MechUpgrade bodyUpgrade;
     public MechUpgrade armUpgrade;
     public MechUpgrade legUpgrade;
+    public GameObject playerModel;
+
+    public List<BuildingRecipe> unlockedBuildings = new List<BuildingRecipe>();
+
     private void Awake()
     {
         if (Instance == null)

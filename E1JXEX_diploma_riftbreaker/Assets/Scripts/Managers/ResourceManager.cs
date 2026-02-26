@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
@@ -12,6 +13,7 @@ public class ResourceManager : MonoBehaviour
     public static ResourceManager Instance { get; private set; }
     
     public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
+    public event Action<List<string>> OnResourceChanged;
     void Awake()
     {
         if (Instance == null)
@@ -36,12 +38,15 @@ public class ResourceManager : MonoBehaviour
     public void AddResource(ResourceType resource, int quantity)
     {
         resources[resource] += quantity;
+        OnResourceChanged?.Invoke(ResourceChanged());
+
     }
     public bool SpendResource(ResourceType resource, int quantity)
     {
         if (resources[resource] >= quantity)
         {
             resources[resource] -= quantity;
+            OnResourceChanged?.Invoke(ResourceChanged());
             return true;
         }
         return false;
@@ -56,6 +61,16 @@ public class ResourceManager : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public List<string> ResourceChanged()
+    {
+        List<string> resourceStrings = new List<string>();
+        foreach (var resource in resources)
+        {
+            resourceStrings.Add($"{resource.Key}: {resource.Value}");
+        }
+        return resourceStrings;
     }
 
 
