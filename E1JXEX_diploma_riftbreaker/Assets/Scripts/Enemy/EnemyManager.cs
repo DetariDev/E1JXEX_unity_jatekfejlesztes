@@ -30,4 +30,18 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
+
+    public void AttackWall(Vector3 callerPosition, GameObject wall, float radius)
+    {
+        foreach (EnemyBase enemy in enemies)
+        {
+            if (Vector3.Distance(enemy.transform.position, callerPosition) < radius)
+            {
+                if (enemy.target != wall)
+                {
+                    enemy.SetTarget(wall);
+                }
+            }
+        }
+    }
 }

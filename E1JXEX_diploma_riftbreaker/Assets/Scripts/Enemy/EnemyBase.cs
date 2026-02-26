@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,6 +28,10 @@ public class EnemyBase : MonoBehaviour
     private IDamageable targetDamageable;
     public float findTargetInterval = 0.5f;
     private float findTargetTimer = 0f;
+
+    private GameObject ClosestWall;
+
+    private Vector3 pathEnd;
 
     private void Awake()
     {
@@ -63,21 +69,42 @@ public class EnemyBase : MonoBehaviour
         if (distance <= attackRange)
         {
             currentState = EnemyState.Attack;
-            agent.isStopped = true;
+            if (agent.isOnNavMesh) agent.isStopped = true;
             AttackTarget();
         }
         else
         {
+
+
             currentState = EnemyState.Chase;
-            agent.isStopped = false;
+            if (agent.isOnNavMesh) agent.isStopped = false;
 
             if (agent.isOnNavMesh && agent.isActiveAndEnabled)
             {
-                agent.SetDestination(target.transform.position);
+                NavMeshPath path = new NavMeshPath();
+                agent.CalculatePath(target.transform.position, path);
+
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    agent.SetPath(path);
+                }
+                else if (path.status == NavMeshPathStatus.PathPartial)
+                {
+                    pathEnd = path.corners[path.corners.Length - 1];
+
+                    if (ClosestWall != null && target != ClosestWall)
+                    {
+                        SetTarget(ClosestWall);
+                        EnemyManager.instance.AttackWall(transform.position, ClosestWall, 25f);
+                    }
+                    else if (target != ClosestWall)
+                    {
+                        agent.SetDestination(pathEnd);
+                    }
+                }
             }
         }
     }
-
     public void TryAttackTarget()
     {
         float distance = Vector3.Distance(transform.position, target.transform.position);
@@ -168,6 +195,21 @@ public class EnemyBase : MonoBehaviour
             Destroy(other.gameObject);
             OnTargetFound(bullet.owner);
         }
+
+        if(other.CompareTag("Wall"))
+        {
+            ClosestWall = other.gameObject;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Wall"))
+        {
+            if (other.gameObject == ClosestWall)
+            {
+                ClosestWall = null;
+            }
+        }
     }
 
     public void TakeDamage(int damage)
@@ -197,4 +239,6 @@ public class EnemyBase : MonoBehaviour
         
 
     }
+
+    
 }

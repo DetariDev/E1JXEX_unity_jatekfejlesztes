@@ -34,6 +34,7 @@
   <Project Path="Unity.2D.SpriteShape.Editor.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Entities.csproj" />
   <Project Path="Unity.Scenes.csproj" />
   <Project Path="PPv2URPConverters.csproj" />
@@ -54,7 +55,6 @@
   <Project Path="Unity.Cinemachine.csproj" />
   <Project Path="Unity.Postprocessing.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Flow.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Splines.Editor.csproj" />
   <Project Path="Unity.Entities.Hybrid.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
