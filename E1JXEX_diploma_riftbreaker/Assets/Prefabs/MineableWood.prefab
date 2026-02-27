@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 352910485876687731}
   m_Layer: 0
   m_Name: EnemyUI
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 47466387228829730}
   m_Layer: 6
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 7210749815657724621}
   m_Layer: 6
   m_Name: MineableWood
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -306,7 +306,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.43, y: 1.3, z: 2.4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5197039191518231843
 MonoBehaviour:
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 2920827413010262027}
   m_Layer: 0
   m_Name: TypeText
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -496,7 +496,7 @@ GameObject:
   - component: {fileID: 3217956472234265989}
   m_Layer: 6
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -608,7 +608,7 @@ GameObject:
   - component: {fileID: 1315107959131398934}
   m_Layer: 6
   m_Name: Sphere (1)
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -720,7 +720,7 @@ GameObject:
   - component: {fileID: 982323340516673413}
   m_Layer: 6
   m_Name: Sphere (2)
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -831,7 +831,7 @@ GameObject:
   - component: {fileID: 1820870417611448978}
   m_Layer: 0
   m_Name: hb
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -906,7 +906,7 @@ GameObject:
   - component: {fileID: 3033169165397713550}
   m_Layer: 0
   m_Name: bg
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -982,7 +982,7 @@ GameObject:
   - component: {fileID: 804659692887542155}
   m_Layer: 6
   m_Name: Sphere (3)
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

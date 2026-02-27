@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2199923727909198086}
   m_Layer: 6
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 5169077758272720633}
   m_Layer: 6
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 352910485876687731}
   m_Layer: 0
   m_Name: EnemyUI
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 7210749815657724621}
   m_Layer: 6
   m_Name: MineableRock
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 2920827413010262027}
   m_Layer: 0
   m_Name: TypeText
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -618,7 +618,7 @@ GameObject:
   - component: {fileID: 2338049273279728958}
   m_Layer: 6
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -708,7 +708,7 @@ GameObject:
   - component: {fileID: 1820870417611448978}
   m_Layer: 0
   m_Name: hb
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 3033169165397713550}
   m_Layer: 0
   m_Name: bg
-  m_TagString: Untagged
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

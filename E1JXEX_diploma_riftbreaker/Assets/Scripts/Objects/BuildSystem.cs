@@ -71,6 +71,17 @@ public class BuildSystem : MonoBehaviour
         float distanceFromPlayer = Vector3.Distance(playerManager.playerModel.transform.position, targetPos);
         if ( distanceFromPlayer <= 2 || distanceFromPlayer >= 10 || occupiedPositions.Contains(snapPos)) return;
 
+        Collider[] hitColliders = Physics.OverlapBox(snapPos, new Vector3(0.45f, 0.45f, 0.45f), Quaternion.identity);
+
+        foreach (var hit in hitColliders)
+        {
+            if (hit.CompareTag("Building") || hit.CompareTag("Player"))
+            {
+                Debug.Log("Foglalt a hely!");
+                return;
+            }
+        }
+
         foreach (var resource in currentBuildingRecipe.resourceCost)
         {
             if (!ResourceManager.Instance.HasEnoughResource(resource.resourceType, resource.amount)) return;
@@ -81,7 +92,9 @@ public class BuildSystem : MonoBehaviour
             ResourceManager.Instance.SpendResource(resource.resourceType, resource.amount);
         }
 
-        Instantiate(currentBuildingRecipe.buildingPrefab, snapPos, Quaternion.identity);
+        GameObject newBuilding = Instantiate(currentBuildingRecipe.buildingPrefab, snapPos, Quaternion.identity);
+        newBuilding.tag = "Building";
         occupiedPositions.Add(snapPos);
+
     }
 }

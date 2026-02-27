@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
@@ -92,4 +93,5 @@ public class PlayerAim : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(direction);
         }
     }
+
 }
