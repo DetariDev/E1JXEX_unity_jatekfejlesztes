@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SuitUpgradeUI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SuitUpgradeUI : MonoBehaviour
     public TMP_Dropdown bodyDropdown;
     public TMP_Dropdown armDropdown;
     public TMP_Dropdown legDropdown;
+    public TMP_Dropdown DrillheadDropDown;
 
     PlayerManager playerManager;
 
@@ -17,6 +19,8 @@ public class SuitUpgradeUI : MonoBehaviour
     private List<MechUpgrade> bodyUpgrades = new List<MechUpgrade>();
     private List<MechUpgrade> armUpgrades = new List<MechUpgrade>();
     private List<MechUpgrade> legUpgrades = new List<MechUpgrade>();
+
+    private List<DrillHead> drillHeads = new List<DrillHead>();
 
     private void Start()
     {
@@ -27,9 +31,11 @@ public class SuitUpgradeUI : MonoBehaviour
         bodyDropdown.onValueChanged.AddListener(OnBodySelected);
         armDropdown.onValueChanged.AddListener(OnArmSelected);
         legDropdown.onValueChanged.AddListener(OnLegSelected);
+        DrillheadDropDown.onValueChanged.AddListener(OnDrillheadSelected);
 
         UpdateAvailableUpgrades();
     }
+
 
     private void ToggleUpgradeMenu(bool obj)
     {
@@ -54,16 +60,20 @@ public class SuitUpgradeUI : MonoBehaviour
         bodyDropdown.ClearOptions();
         armDropdown.ClearOptions();
         legDropdown.ClearOptions();
+        DrillheadDropDown.ClearOptions();
 
         headUpgrades.Clear();
         bodyUpgrades.Clear();
         armUpgrades.Clear();
         legUpgrades.Clear();
+        drillHeads.Clear();
 
         headDropdown.options.Add(new TMP_Dropdown.OptionData("None"));
         bodyDropdown.options.Add(new TMP_Dropdown.OptionData("None"));
         armDropdown.options.Add(new TMP_Dropdown.OptionData("None"));
         legDropdown.options.Add(new TMP_Dropdown.OptionData("None"));
+        DrillheadDropDown.AddOptions(playerManager.availableDrillHeads.ConvertAll(drillhead => new TMP_Dropdown.OptionData(drillhead.name)));
+        drillHeads.AddRange(playerManager.availableDrillHeads);
 
         headUpgrades.Add(null);
         bodyUpgrades.Add(null);
@@ -93,14 +103,23 @@ public class SuitUpgradeUI : MonoBehaviour
             }
         }
 
+        headDropdown.SetValueWithoutNotify(Mathf.Max(0, headUpgrades.IndexOf(playerManager.headUpgrade)));
+        bodyDropdown.SetValueWithoutNotify(Mathf.Max(0, bodyUpgrades.IndexOf(playerManager.bodyUpgrade)));
+        armDropdown.SetValueWithoutNotify(Mathf.Max(0, armUpgrades.IndexOf(playerManager.armUpgrade)));
+        legDropdown.SetValueWithoutNotify(Mathf.Max(0, legUpgrades.IndexOf(playerManager.legUpgrade)));
+        DrillheadDropDown.SetValueWithoutNotify(Mathf.Max(0, drillHeads.IndexOf(playerManager.currentDrillHead)));
+
         headDropdown.RefreshShownValue();
         bodyDropdown.RefreshShownValue();
         armDropdown.RefreshShownValue();
         legDropdown.RefreshShownValue();
+        DrillheadDropDown.RefreshShownValue();
     }
 
     private void OnHeadSelected(int index) { playerManager.EquipUpgrade(UpgradePlace.Head, headUpgrades[index]); }
     private void OnBodySelected(int index) { playerManager.EquipUpgrade(UpgradePlace.Body, bodyUpgrades[index]); }
     private void OnArmSelected(int index) { playerManager.EquipUpgrade(UpgradePlace.Arm, armUpgrades[index]); }
     private void OnLegSelected(int index) { playerManager.EquipUpgrade(UpgradePlace.Leg, legUpgrades[index]); }
+
+    private void OnDrillheadSelected(int index) { playerManager.currentDrillHead = drillHeads[index]; }
 }

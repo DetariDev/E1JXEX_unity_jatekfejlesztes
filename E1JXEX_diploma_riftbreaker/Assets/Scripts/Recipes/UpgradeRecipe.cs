@@ -7,8 +7,8 @@ public enum UpgradeType
     MaxHealth,
     MaxStamina,
     BaseSpeed,
-    WaterSpeed,
-    MiningYield
+    MiningYield,
+    carryPenalty
 }
 
 [Serializable]

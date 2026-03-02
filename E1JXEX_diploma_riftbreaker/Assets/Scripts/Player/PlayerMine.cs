@@ -30,8 +30,9 @@ public class PlayerMining : MonoBehaviour
         {
             if (Time.time >= nextMineTime)
             {
-                TryMine();
-                nextMineTime = Time.time + (1f / PlayerManager.Instance.currentDrillHead.miningRate);
+                TryMine(); 
+                float totalMiningRate = PlayerManager.Instance.currentDrillHead.miningRate + PlayerManager.Instance.drillspeedmodification;
+                nextMineTime = Time.time + (1f / totalMiningRate);
             }
         }
     }

@@ -6,7 +6,6 @@ public class PlayerCarrier : MonoBehaviour
     public Transform[] carrySlots;
     public LayerMask chunkLayer;
     public float pickupRadius = 4.0f;
-    public float speedPenaltyPerChunk = 0.5f;
 
     private List<ResourceChunk> carriedChunks = new List<ResourceChunk>();
     private InputSystemActions.PlayerActions playerInput;
@@ -14,6 +13,7 @@ public class PlayerCarrier : MonoBehaviour
     private void Start()
     {
         playerInput = InputManager.instance.input.Player;
+        PlayerManager.Instance.OnStatsUpdated += ApplyWeightPenalty;
     }
 
     private void Update()
@@ -69,7 +69,7 @@ public class PlayerCarrier : MonoBehaviour
 
     public void ApplyWeightPenalty()
     {
-        float penaltyMultiplier = Mathf.Max(0f, 1f - (carriedChunks.Count * speedPenaltyPerChunk));
+        float penaltyMultiplier = Mathf.Max(0f, 1f - (carriedChunks.Count * PlayerManager.Instance.speedPenalty));
         PlayerManager.Instance.currentSpeed = PlayerManager.Instance.baseSpeed * penaltyMultiplier;
     }
 

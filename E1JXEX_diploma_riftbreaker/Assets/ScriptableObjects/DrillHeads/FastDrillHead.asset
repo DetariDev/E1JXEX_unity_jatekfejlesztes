@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf060fb75a20ceb489dd60e78c57c6f2, type: 3}
-  m_Name: NewWeaponRecipe
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponRecipe
-  resourceCost:
-  - resourceType: 2
-    amount: 15
-  weaponToCraft: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 75b8ceba9dd35bc45addbdc17e1c06a2, type: 3}
+  m_Name: FastDrillHead
+  m_EditorClassIdentifier: Assembly-CSharp::DrillHead
+  mineableResources: 0000000001000000
+  miningRate: 20
+  miningAmount: 2
+  range: 4

@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager Instance { get; private set; }
     public event Action<bool> OnUpgradeMenuToggle;
     public event Action<bool> OnBuildStateToggle;
-    
+    public event Action OnStatsUpdated;
 
     private int baseMaxHealth = 100;
     private float baseBaseSpeed = 5f;
@@ -21,6 +21,9 @@ public class PlayerManager : MonoBehaviour
     public float maxStamina;
     public float staminaRegenRate = 5f;
     public float staminaDrainRate = 2f;
+
+    public float speedPenalty;
+    public float baseSpeedPenalty = 0.25f;
 
     public int currentHealth;
     public float currentSpeed;
@@ -33,7 +36,8 @@ public class PlayerManager : MonoBehaviour
     public bool inUpgradeMenu = false;
 
     public DrillHead currentDrillHead;
-    [SerializeField] public DrillHead defaultDrillHead;
+    public List<DrillHead> availableDrillHeads;
+    public int drillspeedmodification = 0;
 
     public List<MechUpgrade> availableUpgrades = new List<MechUpgrade>();
     public MechUpgrade headUpgrade;
@@ -62,7 +66,8 @@ public class PlayerManager : MonoBehaviour
         currentHealth = maxHealth;
         currentSpeed = baseSpeed;
         currentStamina = maxStamina;
-        currentDrillHead = defaultDrillHead;
+        currentDrillHead = availableDrillHeads[0];
+        speedPenalty = baseSpeedPenalty;
         InputManager.instance.input.Player.BuildToggle.performed += HandleBuilding;
         InputManager.instance.input.Player.UpgradeToggle.performed += ToggleUpgradeMenu;
     }
@@ -133,6 +138,8 @@ public class PlayerManager : MonoBehaviour
         maxHealth = baseMaxHealth;
         baseSpeed = baseBaseSpeed;
         maxStamina = baseMaxStamina;
+        speedPenalty = baseSpeedPenalty;
+        drillspeedmodification = 0;
 
         ApplyModifiers(headUpgrade);
         ApplyModifiers(bodyUpgrade);
@@ -142,12 +149,13 @@ public class PlayerManager : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
         currentSpeed = baseSpeed;
+        OnStatsUpdated?.Invoke();
     }
+
 
     private void ApplyModifiers(MechUpgrade item)
     {
         if (item == null) return;
-
         foreach (var mod in item.modifiers)
         {
             switch (mod.type)
@@ -161,9 +169,11 @@ public class PlayerManager : MonoBehaviour
                 case UpgradeType.BaseSpeed:
                     baseSpeed += mod.value;
                     break;
-                case UpgradeType.WaterSpeed:
-                    break;
                 case UpgradeType.MiningYield:
+                    drillspeedmodification += Mathf.RoundToInt(mod.value);
+                    break;
+                case UpgradeType.carryPenalty:
+                    speedPenalty -= mod.value;
                     break;
             }
         }
