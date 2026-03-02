@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerMining : MonoBehaviour
 {
     [SerializeField] private PlayerAim playerAim;
-    [SerializeField] private float miningRate = 1.0f;
     [SerializeField] private int miningAmount = 1;
     [SerializeField] private float range = 4.0f;
     [SerializeField] public LayerMask mineableLayer;
@@ -19,7 +18,6 @@ public class PlayerMining : MonoBehaviour
         playerAim = GetComponent<PlayerAim>();
         cam = Camera.main;
         playerInput = InputManager.instance.input.Player;
-        miningRate = PlayerManager.Instance.currentDrillHead.miningRate;
         miningAmount = PlayerManager.Instance.currentDrillHead.miningAmount;
         range = PlayerManager.Instance.currentDrillHead.range;
         mineableResources = PlayerManager.Instance.currentDrillHead.mineableResources;
@@ -33,24 +31,28 @@ public class PlayerMining : MonoBehaviour
             if (Time.time >= nextMineTime)
             {
                 TryMine();
-                nextMineTime = Time.time + (1f / miningRate);
+                nextMineTime = Time.time + (1f / PlayerManager.Instance.currentDrillHead.miningRate);
             }
         }
     }
 
     private void TryMine()
     {
-
         Vector3 rayDirection = playerAim.aimTarget.position - cam.transform.position;
         if (Physics.Raycast(cam.transform.position, rayDirection, out RaycastHit hit, Mathf.Infinity, mineableLayer))
         {
-            if (Vector3.Distance(transform.position, hit.transform.position) <= range)
+            if (Vector3.Distance(transform.position, hit.transform.position) <= PlayerManager.Instance.currentDrillHead.range)
             {
+                if (hit.collider.CompareTag("Building"))
+                {
+                    Destroy(hit.collider.gameObject);
+                    return;
+                }
                 if (hit.collider.TryGetComponent(out Mineable mineable))
                 {
-                    if (mineableResources.Contains(mineable.resourceType))
+                    if (PlayerManager.Instance.currentDrillHead.mineableResources.Contains(mineable.resourceType))
                     {
-                        mineable.Mine(miningAmount);
+                        mineable.Mine(PlayerManager.Instance.currentDrillHead.miningAmount);
                     }
                 }
             }

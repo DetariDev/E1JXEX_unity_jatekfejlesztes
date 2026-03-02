@@ -4,29 +4,44 @@ using UnityEngine.UI;
 
 public class Mineable : MonoBehaviour
 {
-    [SerializeField] public ResourceType resourceType;
-    [SerializeField] private int resourceAmount;
-    [SerializeField] private int maxResourceAmount = 100;
+    public ResourceType resourceType;
+    public float maxDurability = 100f;
+    private float currentDurability;
+
+    public int yieldAmount = 3;
+    public GameObject chunkPrefab;
+
     public TMP_Text typeText;
     public Image countBar;
 
     void Start()
     {
-        typeText.text = resourceType.ToString();
-        resourceAmount = maxResourceAmount;
+        currentDurability = maxDurability;
+        if (typeText != null) typeText.text = resourceType.ToString();
     }
-    
 
-    public void Mine(int amount)
+    public void Mine(float drillPower)
     {
-        if (resourceAmount <= 0) return;
+        currentDurability -= drillPower;
+        countBar.fillAmount = currentDurability / maxDurability;
 
-        resourceAmount -= amount;
-        ResourceManager.Instance.AddResource(resourceType, amount);
-        countBar.fillAmount = (float)resourceAmount / maxResourceAmount;
-        if (resourceAmount <= 0)
+        if (currentDurability <= 0)
         {
-            Destroy(gameObject);
+            BreakAndDrop();
         }
+    }
+
+    private void BreakAndDrop()
+    {
+        for (int i = 0; i < yieldAmount; i++)
+        {
+            Vector3 dropPos = transform.position + new Vector3(Random.Range(-1f, 1f), 1f, Random.Range(-1f, 1f));
+            GameObject chunkObj = Instantiate(chunkPrefab, dropPos, Quaternion.identity);
+
+            ResourceChunk chunk = chunkObj.GetComponent<ResourceChunk>();
+            chunk.resourceType = this.resourceType;
+            chunk.amount = 1;
+        }
+        Destroy(gameObject);
     }
 }

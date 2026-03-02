@@ -446,6 +446,7 @@ MonoBehaviour:
   resourceType: 1
   resourceAmount: 100
   maxResourceAmount: 100
+  chunkPrefab: {fileID: 550621885735795161, guid: 26dc16246b628294c98e529c65f826dd, type: 3}
   typeText: {fileID: 2920827413010262027}
   countBar: {fileID: 1820870417611448978}
 --- !u!114 &7210749815657724621

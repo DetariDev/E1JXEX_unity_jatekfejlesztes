@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingRecipe
   resourceCost:
   - resourceType: 1
-    amount: 25
+    amount: 3
   buildingName: Stone Wall
   buildingPrefab: {fileID: 8060693006757567799, guid: b37951128890dac449c265b6b480b97b, type: 3}
