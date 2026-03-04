@@ -8,12 +8,14 @@ public class BaseUpgradeTier
 {
     public string tierName = "Level 2 Upgrade";
     public List<ResourceCost> upgradeCosts;
-    
+    public GameObject upgradeVisuals;
+
 }
 
 public class MainBase : MonoBehaviour
 {
     public static MainBase Instance { get; private set; }
+    public GameObject baseVisual;
     public TMP_Text neededResourcesUIText;
     public int currentLevel = 1;
     public event Action OnBaseLeveledUp;
@@ -40,6 +42,15 @@ public class MainBase : MonoBehaviour
         }
         return null;
     }
+    public BaseUpgradeTier GetCurrentTier()
+    {
+        int currentTierIndex = currentLevel - 2;
+        if (currentTierIndex >= 0 && currentTierIndex < baseTiers.Count)
+        {
+            return baseTiers[currentTierIndex];
+        }
+        return null;
+    }
     public void TryUpgradeBase()
     {
         BaseUpgradeTier nextTier = GetNextTier();
@@ -62,6 +73,15 @@ public class MainBase : MonoBehaviour
         currentLevel++;
         OnBaseLeveledUp?.Invoke();
         ResourceTextUpdate();
+        if (nextTier.upgradeVisuals != null)
+        {
+            baseVisual.SetActive(false);
+            if (GetCurrentTier() != null)
+            {
+                GetCurrentTier().upgradeVisuals.SetActive(false);
+            }
+            nextTier.upgradeVisuals.SetActive(true);
+        }
     }
     void ResourceTextUpdate()
     {
