@@ -7,6 +7,7 @@ public class WeaponMakerUI : MonoBehaviour
 {
     public GameObject[] weaponButtons;
     WeaponManager weaponManager;
+    
     private void Start()
     {
         weaponManager = WeaponManager.instance;
