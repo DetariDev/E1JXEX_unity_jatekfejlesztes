@@ -25,7 +25,6 @@ public class SuitUpgradeUI : MonoBehaviour
     private void Start()
     {
         playerManager = PlayerManager.Instance;
-        playerManager.OnUpgradeMenuToggle += ToggleUpgradeMenu;
 
         headDropdown.onValueChanged.AddListener(OnHeadSelected);
         bodyDropdown.onValueChanged.AddListener(OnBodySelected);
@@ -36,23 +35,6 @@ public class SuitUpgradeUI : MonoBehaviour
         UpdateAvailableUpgrades();
     }
 
-
-    private void ToggleUpgradeMenu(bool obj)
-    {
-        upgradeCanvas.enabled = obj;
-        if (obj)
-        {
-            UpdateAvailableUpgrades();
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (playerManager != null)
-        {
-            playerManager.OnUpgradeMenuToggle -= ToggleUpgradeMenu;
-        }
-    }
 
     void UpdateAvailableUpgrades()
     {

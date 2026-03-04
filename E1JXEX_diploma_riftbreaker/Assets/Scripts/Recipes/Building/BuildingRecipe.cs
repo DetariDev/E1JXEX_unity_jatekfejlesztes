@@ -4,4 +4,5 @@ public class BuildingRecipe : RecipeBase
 {
     public string buildingName;
     public GameObject buildingPrefab;
+
 }

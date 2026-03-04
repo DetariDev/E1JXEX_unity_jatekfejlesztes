@@ -7,34 +7,24 @@ public class CraftingManager : MonoBehaviour
     private ICraftingFactory weaponFactory = new WeaponFactory();
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        if (Instance != null && Instance != this) Destroy(gameObject);
+        else Instance = this;
     }
 
     public bool TryCraft(RecipeBase recipe)
     {
         foreach (var resource in recipe.resourceCost)
         {
-            if (ResourceManager.Instance.HasEnoughResource(resource.resourceType, resource.amount))
-            {
-                continue;
-            }
-            else
-            {
-                Debug.Log("Not enough resources to craft!");
-                return false;
-            }
+            if (ResourceManager.Instance.HasEnoughResource(resource.resourceType, resource.amount)) continue;
+            else return false;
         }
         foreach (var resource in recipe.resourceCost)
         {
             ResourceManager.Instance.SpendResource(resource.resourceType, resource.amount);
+        }
+        if (MainBase.Instance.currentLevel<recipe.minBaseLevel)
+        {
+            return false;
         }
 
         switch (recipe)

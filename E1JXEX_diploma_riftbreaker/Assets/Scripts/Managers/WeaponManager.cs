@@ -14,6 +14,7 @@ public class WeaponManager : MonoBehaviour
 
     [Foldout("Fegyver")]
     public List<Weapon> availableWeapons = new List<Weapon>();
+    public List<WeaponRecipe> weaponRecipes = new List<WeaponRecipe>();
     public Weapon currentWeapon;
     public Weapon StartingWeapon;
 

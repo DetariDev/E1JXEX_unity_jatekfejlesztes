@@ -11,4 +11,5 @@ public struct ResourceCost
 public abstract class RecipeBase : ScriptableObject
 {
     public ResourceCost[] resourceCost;
+    public int minBaseLevel;
 }

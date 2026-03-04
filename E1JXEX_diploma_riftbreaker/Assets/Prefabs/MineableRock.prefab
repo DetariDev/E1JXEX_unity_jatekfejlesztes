@@ -192,10 +192,9 @@ GameObject:
   - component: {fileID: 7262895096831830376}
   - component: {fileID: 4173448382124731574}
   - component: {fileID: 2550194252477234180}
-  - component: {fileID: 6820138995069164470}
   - component: {fileID: 352910485876687731}
   m_Layer: 0
-  m_Name: EnemyUI
+  m_Name: UI
   m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -286,21 +285,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6820138995069164470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2553278862295598707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d590d246616cd4bb70c4d555e774b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  healthBar: {fileID: 1820870417611448978}
-  stateText: {fileID: 2920827413010262027}
-  enemy: {fileID: 0}
 --- !u!114 &352910485876687731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,8 +428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mineable
   resourceType: 1
-  resourceAmount: 100
-  maxResourceAmount: 100
+  maxDurability: 100
+  yieldAmount: 3
   chunkPrefab: {fileID: 550621885735795161, guid: 26dc16246b628294c98e529c65f826dd, type: 3}
   typeText: {fileID: 2920827413010262027}
   countBar: {fileID: 1820870417611448978}

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponRecipe
   resourceCost:
   - resourceType: 1
-    amount: 30
-  - resourceType: 2
-    amount: 30
+    amount: 1
+  - resourceType: 0
+    amount: 1
   weaponToCraft: {fileID: 11400000, guid: 4b64ca6f9628fc44e919c88908b3cee7, type: 2}
+  minBaseLevel: 1

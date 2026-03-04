@@ -8,7 +8,7 @@ using VInspector;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
-    public event Action<bool> OnUpgradeMenuToggle;
+    public event Action<bool> OnMenuToggle;
     public event Action<bool> OnBuildStateToggle;
     public event Action OnStatsUpdated;
 
@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviour
     public bool staminaDrained;
     public bool sprintToggle;
     public bool inBuildState = false;
-    public bool inUpgradeMenu = false;
+    public bool inMenu = false;
 
     public DrillHead currentDrillHead;
     public List<DrillHead> availableDrillHeads;
@@ -74,13 +74,22 @@ public class PlayerManager : MonoBehaviour
 
     private void ToggleUpgradeMenu(InputAction.CallbackContext context)
     {
-        inUpgradeMenu = !inUpgradeMenu;
-        OnUpgradeMenuToggle?.Invoke(inUpgradeMenu);
+        inMenu = !inMenu;
+        OnMenuToggle?.Invoke(inMenu);
+        inBuildState = false;
+        OnBuildStateToggle?.Invoke(inBuildState);
     }
 
     public void HandleBuilding(InputAction.CallbackContext context)
     {
-        inBuildState = !inBuildState;
+        if (inMenu)
+        {
+            inBuildState = false;
+        }
+        else
+        {
+            inBuildState = !inBuildState;
+        }
         OnBuildStateToggle?.Invoke(inBuildState);
     }
 

@@ -28,27 +28,31 @@ public class BuildSystem : MonoBehaviour
     }
 
     private int currentBuildingIndex = 0;
-    public void ChangeBuildingRecipe(UnityEngine.InputSystem.InputAction.CallbackContext context) 
+    public void ChangeBuildingRecipe(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (playerManager.unlockedBuildings.Count <= 1) return;
+        List<BuildingRecipe> availableBuildings = playerManager.unlockedBuildings.FindAll(building => building.minBaseLevel <= MainBase.Instance.currentLevel);
+
+        if (availableBuildings.Count <= 1) return;
+
         if (!InputManager.instance.isGamepadMode)
         {
             float scrollValue = context.ReadValue<Vector2>().y;
 
             if (scrollValue > 0)
             {
-                currentBuildingIndex = (currentBuildingIndex + 1) % playerManager.unlockedBuildings.Count;
+                currentBuildingIndex = (currentBuildingIndex + 1) % availableBuildings.Count;
             }
             else if (scrollValue < 0)
             {
-                currentBuildingIndex = (currentBuildingIndex - 1 + playerManager.unlockedBuildings.Count) % playerManager.unlockedBuildings.Count;
+                currentBuildingIndex = (currentBuildingIndex - 1 + availableBuildings.Count) % availableBuildings.Count;
             }
-            currentBuildingRecipe = playerManager.unlockedBuildings[currentBuildingIndex];
+            currentBuildingRecipe = availableBuildings[currentBuildingIndex];
         }
         else
         {
             // gamepades epitesvaltast majd implementalni
         }
+
         OnCurrentBuildingChanged?.Invoke(currentBuildingRecipe);
     }
 
@@ -69,7 +73,7 @@ public class BuildSystem : MonoBehaviour
         Vector3 targetPos = playerAim.aimTarget.position;
         Vector3 snapPos = new Vector3(Mathf.Round(targetPos.x), 0.5f, Mathf.Round(targetPos.z));
         float distanceFromPlayer = Vector3.Distance(playerManager.playerModel.transform.position, targetPos);
-        if ( distanceFromPlayer <= 2 || distanceFromPlayer >= 10 || occupiedPositions.Contains(snapPos)) return;
+        if ( distanceFromPlayer <= 2 || distanceFromPlayer >= 10 || occupiedPositions.Contains(snapPos) || playerManager.inMenu) return;
 
         Collider[] hitColliders = Physics.OverlapBox(snapPos, new Vector3(0.45f, 0.45f, 0.45f), Quaternion.identity);
 

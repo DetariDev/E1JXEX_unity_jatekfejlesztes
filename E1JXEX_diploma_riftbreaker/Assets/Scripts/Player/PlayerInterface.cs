@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using VInspector.Libs;
 
 public class PlayerInterface : MonoBehaviour
 {
-    public TMP_Text healtText;
-    public TMP_Text staminaText;
+    public Image healthBar;
+    public Image staminaBar;
     PlayerManager playerManager;
     private void Start()
     {
@@ -15,8 +17,8 @@ public class PlayerInterface : MonoBehaviour
     {
         if (playerManager != null) 
         {
-            healtText.text = "Health: " + playerManager.currentHealth.ToString();
-            staminaText.text = "Stamina: " + Mathf.Round(playerManager.currentStamina).ToString();
+            healthBar.fillAmount = (playerManager.currentHealth).ToFloat() / playerManager.maxHealth;
+            staminaBar.fillAmount = (playerManager.currentStamina) / playerManager.maxStamina;
         }
     }
 }

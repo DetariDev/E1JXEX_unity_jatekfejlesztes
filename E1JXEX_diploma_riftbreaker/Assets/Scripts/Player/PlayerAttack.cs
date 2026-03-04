@@ -22,7 +22,7 @@ public class PlayerAttack : MonoBehaviour
     }
     private void Update()
     {
-        if (currentWeapon == null ||playerManager.inBuildState || playerManager.inUpgradeMenu) return;
+        if (currentWeapon == null ||playerManager.inBuildState || playerManager.inMenu) return;
         switch (currentWeapon.weaponType)
         {
             case WeaponType.auto:
