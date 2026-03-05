@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class SuitUpgradeUI : MonoBehaviour
 {
+    public GameObject[] upgradePurchaseButtons;
     public Canvas upgradeCanvas;
     public TMP_Dropdown headDropdown;
     public TMP_Dropdown bodyDropdown;
@@ -14,6 +16,7 @@ public class SuitUpgradeUI : MonoBehaviour
     public TMP_Dropdown DrillheadDropDown;
 
     PlayerManager playerManager;
+
 
     private List<MechUpgrade> headUpgrades = new List<MechUpgrade>();
     private List<MechUpgrade> bodyUpgrades = new List<MechUpgrade>();
@@ -31,9 +34,11 @@ public class SuitUpgradeUI : MonoBehaviour
         armDropdown.onValueChanged.AddListener(OnArmSelected);
         legDropdown.onValueChanged.AddListener(OnLegSelected);
         DrillheadDropDown.onValueChanged.AddListener(OnDrillheadSelected);
-
+        UpdateMechUpgradeRecipes();
         UpdateAvailableUpgrades();
+
     }
+
 
 
     void UpdateAvailableUpgrades()
@@ -104,4 +109,54 @@ public class SuitUpgradeUI : MonoBehaviour
     private void OnLegSelected(int index) { playerManager.EquipUpgrade(UpgradePlace.Leg, legUpgrades[index]); }
 
     private void OnDrillheadSelected(int index) { playerManager.currentDrillHead = drillHeads[index]; }
+
+
+    private void UpdateMechUpgradeRecipes()
+    {
+        for (int i = 0; i < upgradePurchaseButtons.Length; i++)
+        {
+            if (playerManager.availableUpgradeRecipes.Count > i)
+            {
+                upgradePurchaseButtons[i].SetActive(true);
+                MechUpgradeRecipe currentRecipe = playerManager.availableUpgradeRecipes[i];
+                string recipecost = "";
+                for (int j = 0; j < playerManager.availableUpgradeRecipes[i].resourceCost.Length; j++)
+                {
+                    recipecost += $"{playerManager.availableUpgradeRecipes[i].resourceCost[j].resourceType}:{playerManager.availableUpgradeRecipes[i].resourceCost[j].amount}\n";
+                }
+                upgradePurchaseButtons[i].GetComponentInChildren<TMP_Text>().text = $"{playerManager.availableUpgradeRecipes[i].name}\n{recipecost}\n level:{playerManager.availableUpgradeRecipes[i].minBaseLevel}";
+                recipecost = "";
+                if (MainBase.Instance.currentLevel < playerManager.availableUpgradeRecipes[i].minBaseLevel)
+                {
+                    upgradePurchaseButtons[i].GetComponent<Image>().color = Color.orangeRed;
+                }
+                else
+                {
+                    upgradePurchaseButtons[i].GetComponent<Image>().color = Color.darkSeaGreen;
+                }
+
+                Button upgradePurchaseButton = upgradePurchaseButtons[i].GetComponent<Button>();
+                upgradePurchaseButton.onClick.RemoveAllListeners();
+                upgradePurchaseButton.onClick.AddListener(() => CraftMechUpgrade(currentRecipe));
+            }
+            else
+            {
+                upgradePurchaseButtons[i].SetActive(false);
+            }
+
+        }
+    }
+
+    public void CraftMechUpgrade(MechUpgradeRecipe mechUpgradeRecipe)
+    {
+        bool tryCraft = CraftingManager.Instance.TryCraft(mechUpgradeRecipe);
+        if (tryCraft)
+        {
+            playerManager.availableUpgradeRecipes.Remove(mechUpgradeRecipe);
+            UpdateMechUpgradeRecipes();
+            UpdateAvailableUpgrades();
+        }
+    }
+
+
 }

@@ -5,6 +5,7 @@ public class CraftingManager : MonoBehaviour
     public static CraftingManager Instance { get; private set; }
 
     private ICraftingFactory weaponFactory = new WeaponFactory();
+    private ICraftingFactory upgradeFactory = new UpgradeFactory();
     void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -31,6 +32,9 @@ public class CraftingManager : MonoBehaviour
         {
             case WeaponRecipe:
                 weaponFactory.Craft(recipe);
+                break;
+            case MechUpgradeRecipe:
+                upgradeFactory.Craft(recipe);
                 break;
             default:
                 Debug.LogWarning("Ismeretlen recept típus!");

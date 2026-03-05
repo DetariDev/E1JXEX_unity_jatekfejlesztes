@@ -40,6 +40,7 @@ public class PlayerManager : MonoBehaviour
     public int drillspeedmodification = 0;
 
     public List<MechUpgrade> availableUpgrades = new List<MechUpgrade>();
+    public List<MechUpgradeRecipe> availableUpgradeRecipes = new List<MechUpgradeRecipe>();
     public MechUpgrade headUpgrade;
     public MechUpgrade bodyUpgrade;
     public MechUpgrade armUpgrade;
