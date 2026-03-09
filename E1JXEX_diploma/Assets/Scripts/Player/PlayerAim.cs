@@ -8,7 +8,6 @@ public class PlayerAim : MonoBehaviour
     public Transform aimTarget;
     [SerializeField] private LayerMask groundMask;
     public Vector3 lastPosition;
-    [SerializeField] private float gamepadCursorSpeed = 1500f;
     private InputSystemActions.PlayerActions playerInput;
     private InputManager inputManager;
     private Camera mainCamera;

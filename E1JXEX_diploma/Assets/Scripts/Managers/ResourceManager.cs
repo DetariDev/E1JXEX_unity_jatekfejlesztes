@@ -11,11 +11,11 @@ public enum ResourceType
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
-    public int power { get; set; }
+    private int power;
+    private int maxPower;
 
     public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     public event Action<List<string>> OnResourceChanged;
-    public event Action<bool> OnElectricityChanged;
     void Awake()
     {
         if (Instance == null)
@@ -77,7 +77,14 @@ public class ResourceManager : MonoBehaviour
 
     public void AddPowery(int plusPower)
     {
-        power += plusPower;
+        if (power + plusPower > maxPower)
+        {
+            power = maxPower;
+        }
+        else
+        {
+            power += plusPower;
+        }
     }
     public bool SpendPower(int spentPower)
     {
