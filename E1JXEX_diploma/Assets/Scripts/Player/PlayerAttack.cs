@@ -6,10 +6,14 @@ public class PlayerAttack : MonoBehaviour
     WeaponManager weaponManager;
     PlayerManager playerManager;
     private Weapon currentWeapon;
+    private Shooting shootingComponent;
+    private PlayerAim playerAim;
     private void Awake()
     {
         weaponManager = WeaponManager.instance;
         playerManager = PlayerManager.Instance;
+        shootingComponent = GetComponent<Shooting>();
+        playerAim = GetComponent<PlayerAim>();
     }
     private void Start()
     {
@@ -39,7 +43,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (isFiring && Time.time >= nextFireTime)
         {
-            weaponManager.Shoot(this.gameObject);
+            shootingComponent.Shoot(gameObject, currentWeapon,playerAim.aimTarget);
             nextFireTime = Time.time + currentWeapon.fireRate;
         }
     }

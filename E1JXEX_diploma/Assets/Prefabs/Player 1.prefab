@@ -444,6 +444,7 @@ GameObject:
   - component: {fileID: 8646564278927713237}
   - component: {fileID: 3072199284374252765}
   - component: {fileID: 8910692761394668853}
+  - component: {fileID: 7942558112548497056}
   m_Layer: 3
   m_Name: Player 1
   m_TagString: Player
@@ -733,6 +734,18 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7942558112548497056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3653570767249592519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66431a1902148ad4b823e58a7ffb5cad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shooting
 --- !u!1 &3768138262323321686
 GameObject:
   m_ObjectHideFlags: 0

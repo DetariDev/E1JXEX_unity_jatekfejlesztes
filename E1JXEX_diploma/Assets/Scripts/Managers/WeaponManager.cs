@@ -56,44 +56,17 @@ public class WeaponManager : MonoBehaviour
     public void ChangeWeapon(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (availableWeapons.Count <= 1) return;
-        if (!InputManager.instance.isGamepadMode)
-        {
-            float scrollValue = context.ReadValue<Vector2>().y;
+        float scrollValue = context.ReadValue<Vector2>().y;
 
-            if (scrollValue > 0)
-            {
-                currentWeaponIndex = (currentWeaponIndex + 1) % availableWeapons.Count;
-            }
-            else if (scrollValue < 0)
-            {
-                currentWeaponIndex = (currentWeaponIndex - 1 + availableWeapons.Count) % availableWeapons.Count;
-            }
-            CurrentWeapon = availableWeapons[currentWeaponIndex];
-        }
-        else
+        if (scrollValue > 0)
         {
-            // gamepades fegyvervaltast majd implementalni
+            currentWeaponIndex = (currentWeaponIndex + 1) % availableWeapons.Count;
         }
-        
-    }
+        else if (scrollValue < 0)
+        {
+            currentWeaponIndex = (currentWeaponIndex - 1 + availableWeapons.Count) % availableWeapons.Count;
+        }
+        CurrentWeapon = availableWeapons[currentWeaponIndex];
 
-    public void Shoot(GameObject owner)
-    {
-        for (int i = 0; i < CurrentWeapon.projectileCount; i++)
-        {
-            Quaternion spread = weaponPos.rotation;
-            if (CurrentWeapon.projectileCount > 1)
-            {
-                spread = Quaternion.Euler(0, UnityEngine.Random.Range(-15f, 15f), 0) * spread;
-            }
-            GameObject Projectile = Instantiate(CurrentWeapon.projectilePrefab, weaponPos.position, spread, null);
-            Projectile projectilecomponent = Projectile.GetComponent<Projectile>();
-            projectilecomponent.damage = CurrentWeapon.damage;
-            projectilecomponent.bulletType = CurrentWeapon.bulletType;
-            projectilecomponent.owner = owner;
-            Rigidbody prb = Projectile.GetComponent<Rigidbody>();
-            prb.AddForce(spread * Vector3.forward * CurrentWeapon.projectilespeed, ForceMode.Impulse);
-            Destroy(Projectile, 5f);
-        }
     }
 }
