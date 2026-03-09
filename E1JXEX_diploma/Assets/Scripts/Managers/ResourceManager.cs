@@ -11,8 +11,8 @@ public enum ResourceType
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
-    private int power;
-    private int maxPower;
+    public int power;
+    public int maxPower;
 
     public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     public event Action<List<string>> OnResourceChanged;
@@ -35,6 +35,7 @@ public class ResourceManager : MonoBehaviour
         {
             resources.Add(type, 0);
         }
+        power = maxPower;
     }
 
     public void AddResource(ResourceType resource, int quantity)

@@ -8,7 +8,7 @@ public class TurretBase : MonoBehaviour
 {
     public int powerCost;
     private List<GameObject> targets = new List<GameObject>();
-    private Weapon turretWeapon;
+    public Weapon turretWeapon;
     private Shooting shootingComponent;
     private Coroutine shootingCoroutine;
     private Coroutine spendPowerCoroutine;
@@ -33,7 +33,17 @@ public class TurretBase : MonoBehaviour
             }
         }
     }
-
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Enemy") && !targets.Contains(other.gameObject))
+        {
+            targets.Add(other.gameObject);
+            if (targets.Count >= 1 && shootingCoroutine == null)
+            {
+                shootingCoroutine = StartCoroutine(ShootingTarget());
+            }
+        }
+    }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Enemy") && targets.Contains(other.gameObject))
@@ -48,27 +58,46 @@ public class TurretBase : MonoBehaviour
     }
     private IEnumerator SpendPower()
     {
-        hasPower = ResourceManager.Instance.SpendResource(ResourceType.Wood, powerCost);
-        yield return new WaitForSeconds(1f);
+        while (true)
+        {
+            hasPower = ResourceManager.Instance.SpendPower(powerCost);
+            yield return new WaitForSeconds(10f);
+        }
+        
     }
 
     private IEnumerator ShootingTarget()
     {
-        if (hasPower)
+        while (targets.Count > 0)
         {
-            shootingComponent.Shoot(gameObject, turretWeapon, FindClosestTarget());
+            if (hasPower)
+            {
+                Transform target = FindClosestTarget();
+                if (target == null)
+                {
+                    break;
+                }
+                shootingComponent.Shoot(gameObject, turretWeapon, FindClosestTarget());
+            }
+            yield return new WaitForSeconds(turretWeapon.fireRate);
         }
-        yield return new WaitForSeconds(turretWeapon.fireRate);
+        shootingCoroutine = null;
     }
 
     private Transform FindClosestTarget()
     {
+        targets.RemoveAll(target => target == null);
+
+        if (targets.Count == 0)
+        {
+            return null;
+        }
         Transform closestTarget = targets[0].transform;
-        float closestDistance = Vector2.Distance(closestTarget.position, gameObject.transform.position);
+        float closestDistance = Vector3.Distance(closestTarget.position, gameObject.transform.position);
         foreach (GameObject target in targets)
         {
-            float tempdistance = Vector2.Distance(target.transform.position, gameObject.transform.position);
-            if (tempdistance<closestDistance)
+            float tempdistance = Vector3.Distance(target.transform.position, gameObject.transform.position);
+            if (tempdistance < closestDistance)
             {
                 closestDistance = tempdistance;
                 closestTarget = target.transform;

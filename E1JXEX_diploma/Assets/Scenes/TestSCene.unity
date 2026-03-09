@@ -6841,6 +6841,7 @@ MonoBehaviour:
   unlockedBuildings:
   - {fileID: 11400000, guid: 0467eca2c4e9a7541b8730c493eca175, type: 2}
   - {fileID: 11400000, guid: c4f664d7ee7b72c4885524f83fd2f515, type: 2}
+  - {fileID: 11400000, guid: 1259167a34185b7419ba0758e7ff8f29, type: 2}
 --- !u!4 &694209239
 Transform:
   m_ObjectHideFlags: 0
@@ -6913,6 +6914,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b441ff5c6ff70dc4fb0e42f4b3dff437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  power: 0
+  maxPower: 100
 --- !u!114 &694209244
 MonoBehaviour:
   m_ObjectHideFlags: 0

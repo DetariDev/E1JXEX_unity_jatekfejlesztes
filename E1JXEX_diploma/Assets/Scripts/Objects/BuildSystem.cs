@@ -75,7 +75,7 @@ public class BuildSystem : MonoBehaviour
         float distanceFromPlayer = Vector3.Distance(playerManager.playerModel.transform.position, targetPos);
         if ( distanceFromPlayer <= 2 || distanceFromPlayer >= 10 || occupiedPositions.Contains(snapPos) || playerManager.inMenu) return;
 
-        Collider[] hitColliders = Physics.OverlapBox(snapPos, new Vector3(0.45f, 0.45f, 0.45f), Quaternion.identity);
+        Collider[] hitColliders = Physics.OverlapBox(snapPos, new Vector3(0.45f, 0.45f, 0.45f), Quaternion.identity, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 
         foreach (var hit in hitColliders)
         {
