@@ -13,7 +13,6 @@ public class PlayerAim : MonoBehaviour
     private InputManager inputManager;
     private Camera mainCamera;
     private Vector2 virtualCursorPos;
-    private Vector3 lastGamepadPos;
     private void Awake()
     {
         inputManager = InputManager.instance;
@@ -23,56 +22,13 @@ public class PlayerAim : MonoBehaviour
     }
     private void Update()
     {
-        HandleInputSwitch();
-        if (inputManager.isGamepadMode)
-        {
-            MoveTargetToGamepad();
-        }
-        else
-        {
-            MoveTargetToMouse();
-        }
+        MoveTargetToMouse();
         RotatePlayerTowardsTarget();
-    }
-
-    private void HandleInputSwitch()
-    {
-        Vector2 gamepadInput = playerInput.Look.ReadValue<Vector2>();
-        if (gamepadInput.magnitude >0 && inputManager.isGamepadMode == false)
-        {
-            inputManager.isGamepadMode = true;
-        }
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            inputManager.isGamepadMode = false;
-        }
     }
 
     private void MoveTargetToMouse()
     {
         CastRayFromScreenPoint(playerInput.MouseLook.ReadValue<Vector2>());
-    }
-    private void MoveTargetToGamepad()
-    {
-
-        Vector2 lookInput = playerInput.Look.ReadValue<Vector2>();
-        if (playerInput.GamepadAim.IsPressed())
-        {
-            Vector3 direction = new Vector3(lookInput.x, 0, lookInput.y);
-            if (direction.magnitude > 0.1f)
-            {
-                lastGamepadPos = direction.normalized;
-
-            }
-            aimTarget.position = transform.position + lastGamepadPos * 10f;
-        }
-        else
-        {
-            virtualCursorPos += lookInput * gamepadCursorSpeed * Time.deltaTime;
-            virtualCursorPos.x = Mathf.Clamp(virtualCursorPos.x,Screen.width*0.2f, Screen.width*0.8f);
-            virtualCursorPos.y = Mathf.Clamp(virtualCursorPos.y,Screen.height * 0.2f, Screen.height* 0.8f);
-            CastRayFromScreenPoint(virtualCursorPos);
-        }
     }
 
     private void CastRayFromScreenPoint(Vector2 screenPoint)
