@@ -22,6 +22,7 @@ public class EnemyBase : MonoBehaviour
     private float nextAttackTime = 0f;
     public int damage = 10;
     public float detectRange = 15.0f;
+    private Collider targetCollider;
     public EnemyState currentState = EnemyState.Idle;
     NavMeshAgent agent;
     public GameObject target;
@@ -30,8 +31,6 @@ public class EnemyBase : MonoBehaviour
     private float findTargetTimer = 0f;
 
     private GameObject ClosestWall;
-
-    private Vector3 pathEnd;
 
     private void Awake()
     {
@@ -62,10 +61,14 @@ public class EnemyBase : MonoBehaviour
         if (target == null)
         {
             currentState = EnemyState.Idle;
+            agent.isStopped = false;
             return;
         }
         float distance = Vector3.Distance(transform.position, target.transform.position);
-
+        if (targetCollider != null)
+        {
+            distance = Vector3.Distance(transform.position, targetCollider.ClosestPointOnBounds(transform.position));
+        }
         if (distance <= attackRange)
         {
             currentState = EnemyState.Attack;
@@ -74,51 +77,28 @@ public class EnemyBase : MonoBehaviour
         }
         else
         {
-
-
             currentState = EnemyState.Chase;
             if (agent.isOnNavMesh) agent.isStopped = false;
 
             if (agent.isOnNavMesh && agent.isActiveAndEnabled)
             {
-                NavMeshPath path = new NavMeshPath();
-                agent.CalculatePath(target.transform.position, path);
+                agent.SetDestination(target.transform.position);
 
-                if (path.status == NavMeshPathStatus.PathComplete)
+                if (!agent.pathPending && agent.pathStatus == NavMeshPathStatus.PathPartial)
                 {
-                    agent.SetPath(path);
-                }
-                else if (path.status == NavMeshPathStatus.PathPartial)
-                {
-                    pathEnd = path.corners[path.corners.Length - 1];
-
                     if (ClosestWall != null && target != ClosestWall)
                     {
                         SetTarget(ClosestWall);
                         EnemyManager.instance.AttackWall(transform.position, ClosestWall, 25f);
                     }
-                    else if (target != ClosestWall)
-                    {
-                        agent.SetDestination(pathEnd);
-                    }
                 }
             }
         }
     }
-    public void TryAttackTarget()
-    {
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= attackRange)
-        {
-            agent.isStopped = true;
-            AttackTarget();
-        }
-        else { currentState = EnemyState.Chase; }
-    }
 
     public void FindTarget()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectRange);
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectRange, Physics.AllLayers, QueryTriggerInteraction.Ignore);
         GameObject closestTarget = null;
         float closestDistance = Mathf.Infinity;
 
@@ -150,6 +130,15 @@ public class EnemyBase : MonoBehaviour
     {
         target = foundTarget;
         targetDamageable = target.GetComponent<IDamageable>();
+        Collider[] colliders = target.GetComponentsInChildren<Collider>();
+        foreach (Collider col in colliders)
+        {
+            if (!col.isTrigger)
+            {
+                targetCollider = col;
+                break;
+            }
+        }
         currentState = EnemyState.Chase;
 
         if (agent.isOnNavMesh && agent.isActiveAndEnabled)
@@ -217,6 +206,7 @@ public class EnemyBase : MonoBehaviour
         health-= damage;
         if (health<=0)
         {
+            ResourceManager.Instance.AddResource(ResourceType.Biomass, 10);
             Destroy(gameObject);
         }
     }
@@ -236,9 +226,5 @@ public class EnemyBase : MonoBehaviour
                 if (targetDamageable == null) currentState = EnemyState.Idle;
             }
         }
-        
-
     }
-
-    
 }

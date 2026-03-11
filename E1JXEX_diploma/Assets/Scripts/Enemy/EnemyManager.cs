@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -5,8 +7,15 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
+    public List<GameObject> enemyPrefabs = new List<GameObject>();
     public List<EnemyBase> enemies;
-    
+    public List<GameObject> nests = new List<GameObject>();
+    public List<GameObject> randomPlaces = new List<GameObject>();
+    public int maxEnemies = 20;
+    public int spawntime = 60;
+    public int radius = 10;
+    private Coroutine spawnCoroutine;
+
 
     private void Awake()
     {
@@ -17,6 +26,35 @@ public class EnemyManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        spawnCoroutine = StartCoroutine(SpawnEnemies());
+    }
+
+    private IEnumerator SpawnEnemies()
+    {
+        while (true)
+        {
+            nests.RemoveAll(nest => nest == null);
+            foreach(GameObject baseplace in nests)
+            {
+                
+                for (int i = 0; i < maxEnemies; i++)
+                {
+                    Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)],new Vector3(baseplace.transform.position.x+UnityEngine.Random.Range(-radius,radius),0, baseplace.transform.position.z + UnityEngine.Random.Range(-radius, radius)),Quaternion.identity,null);
+                }
+            }
+            foreach(GameObject randomplace in randomPlaces)
+            {
+                Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)], randomplace.transform.position,Quaternion.identity, null);
+
+            }
+            spawntime = UnityEngine.Random.Range(60, 90);
+            maxEnemies += 10;
+            yield return new WaitForSeconds(spawntime);
         }
     }
 

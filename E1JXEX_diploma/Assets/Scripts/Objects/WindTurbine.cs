@@ -1,16 +1,26 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class WindTurbine : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public int generationAmount = 5;
+    private Coroutine powerGenerationCoroutine;
+    private ResourceManager resourceManager;
+
+    private void Start()
     {
-        
+        resourceManager = ResourceManager.Instance;
+        powerGenerationCoroutine = StartCoroutine(GeneratePower());
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator GeneratePower()
     {
-        
+        while (true)
+        {
+            resourceManager.AddPower(generationAmount);
+            yield return new WaitForSeconds(10f);
+        }
     }
 }

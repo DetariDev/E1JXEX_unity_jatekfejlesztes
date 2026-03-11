@@ -6,7 +6,11 @@ public enum ResourceType
 {
     Wood,
     Stone,
-    Metal
+    Metal,
+    Coal,
+    Oil,
+    Crystal,
+    Biomass
 }
 public class ResourceManager : MonoBehaviour
 {
@@ -76,7 +80,7 @@ public class ResourceManager : MonoBehaviour
         return resourceStrings;
     }
 
-    public void AddPowery(int plusPower)
+    public void AddPower(int plusPower)
     {
         if (power + plusPower > maxPower)
         {

@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using VInspector.Libs;
 
 [Serializable]
 public class BaseUpgradeTier
@@ -9,6 +12,7 @@ public class BaseUpgradeTier
     public string tierName = "Level 2 Upgrade";
     public List<ResourceCost> upgradeCosts;
     public GameObject upgradeVisuals;
+    public int maxHealth;
 
 }
 
@@ -20,6 +24,11 @@ public class MainBase : MonoBehaviour
     public int currentLevel = 1;
     public event Action OnBaseLeveledUp;
     public List<BaseUpgradeTier> baseTiers = new List<BaseUpgradeTier>();
+    private ObjectHealth baseHealth;
+
+
+    public Image healthBar;
+    private Coroutine healCoroutine;
 
     private void Awake()
     {
@@ -29,8 +38,24 @@ public class MainBase : MonoBehaviour
 
     private void Start()
     {
+        baseHealth = GetComponent<ObjectHealth>();
         ResourceTextUpdate();
-    } 
+        healCoroutine = StartCoroutine(HealBase());
+    }
+
+    private IEnumerator HealBase()
+    {
+        while (true)
+        {
+            if (baseHealth.currentHealth < baseHealth.maxHealth)
+            {
+                baseHealth.Heal(1);
+                healthBar.fillAmount = (baseHealth.currentHealth).ToFloat() / baseHealth.maxHealth;
+            }
+
+            yield return new WaitForSeconds(baseHealth.healTime);
+        }
+    }
 
     public BaseUpgradeTier GetNextTier()
     {
@@ -71,6 +96,7 @@ public class MainBase : MonoBehaviour
             ResourceManager.Instance.SpendResource(cost.resourceType, cost.amount);
         }
         currentLevel++;
+        baseHealth.maxHealth = nextTier.maxHealth;
         OnBaseLeveledUp?.Invoke();
         ResourceTextUpdate();
         if (nextTier.upgradeVisuals != null)
