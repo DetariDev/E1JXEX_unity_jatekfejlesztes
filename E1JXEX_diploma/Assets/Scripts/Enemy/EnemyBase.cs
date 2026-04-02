@@ -1,9 +1,12 @@
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using VInspector;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public enum EnemyState
 {
@@ -25,12 +28,64 @@ public class EnemyBase : MonoBehaviour
     private Collider targetCollider;
     public EnemyState currentState = EnemyState.Idle;
     NavMeshAgent agent;
-    public GameObject target;
+    private GameObject target;
+    
+
+    public GameObject Target
+    {
+        get { return target; }
+        set 
+        {
+            if (target != value)
+            {
+                target = value;
+                OnTargetChanged?.Invoke(target);
+            }
+            
+        }
+    }
+    public event Action<GameObject> OnTargetChanged;
+
     private IDamageable targetDamageable;
-    public float findTargetInterval = 0.5f;
-    private float findTargetTimer = 0f;
 
     private GameObject ClosestWall;
+
+    private float distancee;
+
+    public float Distance
+    {
+        get { return distancee; }
+        set
+        {
+            distancee = value;
+            if (Distance <= attackRange)
+            {
+                currentState = EnemyState.Attack;
+                if (agent.isOnNavMesh) agent.isStopped = true;
+                AttackTarget();
+            }
+            else
+            {
+                currentState = EnemyState.Chase;
+                if (agent.isOnNavMesh) agent.isStopped = false;
+
+                if (agent.isOnNavMesh && agent.isActiveAndEnabled)
+                {
+                    agent.SetDestination(Target.transform.position);
+
+                    if (!agent.pathPending && agent.pathStatus == NavMeshPathStatus.PathPartial)
+                    {
+                        if (ClosestWall != null && Target != ClosestWall)
+                        {
+                            SetTarget(ClosestWall);
+                            EnemyManager.instance.AttackWall(transform.position, ClosestWall, 25f);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
 
     private void Awake()
     {
@@ -43,56 +98,65 @@ public class EnemyBase : MonoBehaviour
     {
         EnemyManager.instance.enemies.Remove(this);
     }
+    private void OnEnable()
+    {
+        OnTargetChanged += HandleTargetChanged;
+    }
+
+
+    private void OnDisable()
+    {
+        OnTargetChanged -= HandleTargetChanged;
+    }
 
     void Start()
     {
         StartCoroutine(RandomPosition());
+        StartCoroutine(TryFindTarget());
+        StartCoroutine(CalculateDistance());
+
+
     }
 
-    void Update()
+    private void HandleTargetChanged(GameObject newTarget)
     {
-        findTargetTimer += Time.deltaTime;
-        if (findTargetTimer >= findTargetInterval)
-        {
-            FindTarget();
-            findTargetTimer = 0f;
-        }
-
-        if (target == null)
+        if (newTarget== null)
         {
             currentState = EnemyState.Idle;
-            agent.isStopped = false;
-            return;
-        }
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (targetCollider != null)
-        {
-            distance = Vector3.Distance(transform.position, targetCollider.ClosestPointOnBounds(transform.position));
-        }
-        if (distance <= attackRange)
-        {
-            currentState = EnemyState.Attack;
-            if (agent.isOnNavMesh) agent.isStopped = true;
-            AttackTarget();
+            if (agent.isOnNavMesh) agent.isStopped = false;
+            targetDamageable = null;
+            targetCollider = null;
         }
         else
         {
             currentState = EnemyState.Chase;
-            if (agent.isOnNavMesh) agent.isStopped = false;
+            targetDamageable = newTarget.GetComponent<IDamageable>();
+            Collider[] colliders = newTarget.GetComponentsInChildren<Collider>();
+            foreach (Collider col in colliders)
+            {
+                if (!col.isTrigger)
+                {
+                    targetCollider = col;
+                    break;
+                }
+            }
 
             if (agent.isOnNavMesh && agent.isActiveAndEnabled)
             {
-                agent.SetDestination(target.transform.position);
-
-                if (!agent.pathPending && agent.pathStatus == NavMeshPathStatus.PathPartial)
-                {
-                    if (ClosestWall != null && target != ClosestWall)
-                    {
-                        SetTarget(ClosestWall);
-                        EnemyManager.instance.AttackWall(transform.position, ClosestWall, 25f);
-                    }
-                }
+                agent.SetDestination(newTarget.transform.position);
             }
+        }
+    }
+    IEnumerator CalculateDistance()
+    {
+        while (true)
+        {
+
+            if (targetCollider != null)
+            {
+                Distance = Vector3.Distance(transform.position, targetCollider.ClosestPointOnBounds(transform.position));
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -120,7 +184,7 @@ public class EnemyBase : MonoBehaviour
             }
         }
 
-        if (closestTarget != null && closestTarget != target)
+        if (closestTarget != null && closestTarget != Target)
         {
             OnTargetFound(closestTarget);
         }
@@ -128,29 +192,26 @@ public class EnemyBase : MonoBehaviour
 
     public void SetTarget(GameObject foundTarget)
     {
-        target = foundTarget;
-        targetDamageable = target.GetComponent<IDamageable>();
-        Collider[] colliders = target.GetComponentsInChildren<Collider>();
-        foreach (Collider col in colliders)
-        {
-            if (!col.isTrigger)
-            {
-                targetCollider = col;
-                break;
-            }
-        }
-        currentState = EnemyState.Chase;
-
-        if (agent.isOnNavMesh && agent.isActiveAndEnabled)
-        {
-            agent.SetDestination(target.transform.position);
-        }
+        Target = foundTarget;
     }
 
-    public void OnTargetFound(GameObject target)
+    public void OnTargetFound(GameObject foundtarget)
     {
-        SetTarget(target);
-        EnemyManager.instance.AlertNearbyEnemies(this, target);
+        SetTarget(foundtarget);
+        EnemyManager.instance.AlertNearbyEnemies(this, foundtarget);
+    }
+
+    private IEnumerator TryFindTarget()
+    {
+        while (true)
+        {
+            if (Target != null && !Target)
+            {
+                Target = null;
+            }
+            FindTarget();
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     IEnumerator RandomPosition()
@@ -159,14 +220,14 @@ public class EnemyBase : MonoBehaviour
         {
             if (currentState == EnemyState.Idle)
             {
-                Vector3 randomDirection = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
+                Vector3 randomDirection = new Vector3(UnityEngine.Random.Range(-10f, 10f), 0, UnityEngine.Random.Range(-10f, 10f));
                 randomDirection += transform.position;
                 NavMeshHit navHit;
                 if (NavMesh.SamplePosition(randomDirection, out navHit, 10f, NavMesh.AllAreas))
                 {
                     agent.SetDestination(navHit.position);
                 }
-                yield return new WaitForSeconds(Random.Range(10, 20));
+                yield return new WaitForSeconds(UnityEngine.Random.Range(10, 20));
             }
             else
             {
@@ -220,9 +281,9 @@ public class EnemyBase : MonoBehaviour
                 targetDamageable.TakeDamage(damage);
                 nextAttackTime = Time.time + 1f / attackRate;
             }
-            else if (target != null)
+            else if (Target != null)
             {
-                targetDamageable = target.GetComponent<IDamageable>();
+                targetDamageable = Target.GetComponent<IDamageable>();
                 if (targetDamageable == null) currentState = EnemyState.Idle;
             }
         }

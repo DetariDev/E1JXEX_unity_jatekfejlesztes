@@ -75,7 +75,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (Vector3.Distance(enemy.transform.position, callerPosition) < radius)
             {
-                if (enemy.target != wall)
+                if (enemy.Target != wall)
                 {
                     enemy.SetTarget(wall);
                 }
