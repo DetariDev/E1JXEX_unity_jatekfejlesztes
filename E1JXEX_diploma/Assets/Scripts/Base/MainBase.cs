@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [Serializable]
@@ -12,7 +13,6 @@ public class BaseUpgradeTier
     public List<ResourceCost> upgradeCosts;
     public GameObject upgradeVisuals;
     public int maxHealth;
-
 }
 
 public class MainBase : MonoBehaviour
@@ -25,9 +25,8 @@ public class MainBase : MonoBehaviour
     public List<BaseUpgradeTier> baseTiers = new List<BaseUpgradeTier>();
     private ObjectHealth baseHealth;
 
-
     public Image healthBar;
-    private Coroutine healCoroutine;
+    public GameObject gameOverPanel;
 
     private void Awake()
     {
@@ -39,21 +38,33 @@ public class MainBase : MonoBehaviour
     {
         baseHealth = GetComponent<ObjectHealth>();
         ResourceTextUpdate();
-        healCoroutine = StartCoroutine(HealBase());
+
+        baseHealth.OnHealthChanged += UpdateHealthUI;
+        UpdateHealthUI();
     }
 
-    private IEnumerator HealBase()
+    private void UpdateHealthUI()
     {
-        while (true)
+        if (baseHealth != null)
         {
-            if (baseHealth.currentHealth < baseHealth.maxHealth)
-            {
-                baseHealth.Heal(1);
-                healthBar.fillAmount =(float)baseHealth.currentHealth/ baseHealth.maxHealth;
-            }
+            healthBar.fillAmount = (float)baseHealth.currentHealth / baseHealth.maxHealth;
 
-            yield return new WaitForSeconds(baseHealth.healTime);
+            if (baseHealth.currentHealth <= 0)
+            {
+                TriggerGameOver();
+            }
         }
+    }
+    private void TriggerGameOver()
+    {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public BaseUpgradeTier GetNextTier()
@@ -66,6 +77,7 @@ public class MainBase : MonoBehaviour
         }
         return null;
     }
+
     public BaseUpgradeTier GetCurrentTier()
     {
         int currentTierIndex = currentLevel - 2;
@@ -75,14 +87,13 @@ public class MainBase : MonoBehaviour
         }
         return null;
     }
+
     public void TryUpgradeBase()
     {
         BaseUpgradeTier nextTier = GetNextTier();
 
-        if (nextTier == null)
-        {
-            return;
-        }
+        if (nextTier == null) return;
+
         foreach (var cost in nextTier.upgradeCosts)
         {
             if (!ResourceManager.Instance.HasEnoughResource(cost.resourceType, cost.amount))
@@ -98,10 +109,12 @@ public class MainBase : MonoBehaviour
         baseHealth.maxHealth = nextTier.maxHealth;
         OnBaseLeveledUp?.Invoke();
         ResourceTextUpdate();
+
         if (TutorialManager.instance.currentStage == TutorialStage.UpgradeBase)
         {
             TutorialManager.instance.NextStage();
         }
+
         if (nextTier.upgradeVisuals != null)
         {
             baseVisual.SetActive(false);
@@ -112,6 +125,7 @@ public class MainBase : MonoBehaviour
             nextTier.upgradeVisuals.SetActive(true);
         }
     }
+
     void ResourceTextUpdate()
     {
         BaseUpgradeTier nextTier = GetNextTier();
@@ -126,9 +140,7 @@ public class MainBase : MonoBehaviour
             resourceText += $"{cost.resourceType}: {cost.amount}\n";
         }
         neededResourcesUIText.text = resourceText;
-
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -154,5 +166,4 @@ public class MainBase : MonoBehaviour
             }
         }
     }
-
 }

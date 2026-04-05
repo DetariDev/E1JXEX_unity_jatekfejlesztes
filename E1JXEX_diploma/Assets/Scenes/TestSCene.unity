@@ -4093,7 +4093,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 32.4
-    OrthographicSize: 9.47
+    OrthographicSize: 9.9
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -4119,7 +4119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304693092}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.47937098, y: -0.000000025345548, z: 0.000000013844292, w: 0.8776124}
+  m_LocalRotation: {x: 0.48252517, y: -0.000000026103326, z: 0.0000000143803724, w: 0.87588215}
   m_LocalPosition: {x: 1.932935, y: 24.47562, z: -8.874015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4245,8 +4245,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 32.4
-  orthographic: 0
-  orthographic size: 9.47
+  orthographic: 1
+  orthographic size: 9.9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4270,7 +4270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.479371, y: -0.000000025345548, z: 0.000000013844292, w: 0.8776124}
+  m_LocalRotation: {x: 0.4825252, y: -0.000000026103331, z: 0.000000014380377, w: 0.8758821}
   m_LocalPosition: {x: 1.932935, y: 24.47562, z: -8.874015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -29165,7 +29165,7 @@ PrefabInstance:
       objectReference: {fileID: 1594905884}
     - target: {fileID: 3276099277537416222, guid: 3f1aa013b50ea134d9a6a879c4f15c2f, type: 3}
       propertyPath: m_VersionIndex
-      value: 2449
+      value: 2524
       objectReference: {fileID: 0}
     - target: {fileID: 3601133736927537481, guid: 3f1aa013b50ea134d9a6a879c4f15c2f, type: 3}
       propertyPath: m_Mesh
@@ -29190,6 +29190,10 @@ PrefabInstance:
     - target: {fileID: 4558797010101812427, guid: 3f1aa013b50ea134d9a6a879c4f15c2f, type: 3}
       propertyPath: m_VersionIndex
       value: 2026
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737207870124746050, guid: 3f1aa013b50ea134d9a6a879c4f15c2f, type: 3}
+      propertyPath: isBase
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4933428517953772515, guid: 3f1aa013b50ea134d9a6a879c4f15c2f, type: 3}
       propertyPath: m_Mesh

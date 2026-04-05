@@ -1,15 +1,29 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class ObjectHealth : MonoBehaviour, IDamageable
 {
+    public bool isBase;
     public int currentHealth = 0;
     public int maxHealth = 100;
     private bool isDead = false;
-    public int healTime = 1;
+    public int amount = 10;
+
+    public float combatDelay = 15f; 
+    private float lastDamageTime;
+
+    public event Action OnHealthChanged;
 
     private void Awake()
     {
         currentHealth = maxHealth;
+        lastDamageTime = -combatDelay;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(HealRoutine());
     }
 
     public void TakeDamage(int damage)
@@ -17,22 +31,30 @@ public class ObjectHealth : MonoBehaviour, IDamageable
         if (isDead) return;
 
         currentHealth -= damage;
-        healTime = 10;
-        if (currentHealth <= 0)
+        lastDamageTime = Time.time;
+
+        OnHealthChanged?.Invoke(); 
+
+        if (currentHealth <= 0 && !isBase)
         {
             isDead = true;
             Destroy(gameObject);
         }
     }
 
-    public void Heal(int amount)
+
+    public IEnumerator HealRoutine()
     {
-        if (isDead) return;
-        currentHealth += amount;
-        healTime = 1;
-        if (currentHealth > maxHealth)
+        while (!isDead)
         {
-            currentHealth = maxHealth;
+            yield return new WaitForSeconds(1f); 
+
+            if (currentHealth < maxHealth && Time.time >= lastDamageTime + combatDelay)
+            {
+                currentHealth += amount;
+                currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+                OnHealthChanged?.Invoke(); 
+            }
         }
     }
 }

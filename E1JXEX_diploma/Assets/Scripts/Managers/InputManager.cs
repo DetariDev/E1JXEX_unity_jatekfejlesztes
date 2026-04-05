@@ -28,6 +28,6 @@ public class InputManager : MonoBehaviour
     {
         input.Disable();
     }
-
     
+
 }
