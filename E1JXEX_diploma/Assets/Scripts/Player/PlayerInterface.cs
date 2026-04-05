@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,14 +12,18 @@ public class PlayerInterface : MonoBehaviour
     private void Start()
     {
         playerManager = PlayerManager.Instance;
+        playerManager.OnHealthChanged += UpdateHealthBar;
+        playerManager.OnStaminaChanged += UpdateStaminaBar;
     }
 
-    private void FixedUpdate()
+    private void UpdateStaminaBar(float obj)
     {
-        if (playerManager != null) 
-        {
-            healthBar.fillAmount = (playerManager.currentHealth).ToFloat() / playerManager.maxHealth;
-            staminaBar.fillAmount = (playerManager.currentStamina) / playerManager.maxStamina;
-        }
+        staminaBar.fillAmount = (playerManager.CurrentStamina) / playerManager.maxStamina;
     }
+
+    private void UpdateHealthBar(int obj)
+    {
+        healthBar.fillAmount = (playerManager.CurrentHealth).ToFloat() / playerManager.maxHealth;
+    }
+
 }

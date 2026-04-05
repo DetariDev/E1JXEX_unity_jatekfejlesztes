@@ -21,6 +21,7 @@ public class EnemyBase : MonoBehaviour
     public int maxHealth = 100;
     public float speed = 3.5f;
     public float attackRange = 2.0f;
+    public float maxchaseRange = 35f;
     public float attackRate = 1f;
     private float nextAttackTime = 0f;
     public int damage = 10;
@@ -63,6 +64,12 @@ public class EnemyBase : MonoBehaviour
                 currentState = EnemyState.Attack;
                 if (agent.isOnNavMesh) agent.isStopped = true;
                 AttackTarget();
+            }
+            else if (Distance > maxchaseRange)
+            {
+                currentState = EnemyState.Idle;
+                if (agent.isOnNavMesh) agent.isStopped = false;
+                Target = null;
             }
             else
             {

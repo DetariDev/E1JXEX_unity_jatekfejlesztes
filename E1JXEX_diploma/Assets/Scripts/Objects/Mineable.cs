@@ -7,7 +7,7 @@ public class Mineable : MonoBehaviour
     public ResourceType resourceType;
     public float maxDurability = 100f;
     private float currentDurability;
-
+    public bool nest;
     public int yieldAmount = 3;
     public GameObject chunkPrefab;
 
@@ -17,7 +17,15 @@ public class Mineable : MonoBehaviour
     void Start()
     {
         currentDurability = maxDurability;
-        if (typeText != null) typeText.text = resourceType.ToString();
+        if (nest)
+        {
+            if (typeText != null) typeText.text = "Enemy Nest!";
+        }
+        else
+        {
+            if (typeText != null) typeText.text = resourceType.ToString();
+        }
+        
     }
 
     public void Mine(float drillPower)

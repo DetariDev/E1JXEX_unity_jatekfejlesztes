@@ -1,22 +1,25 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Billboard : MonoBehaviour
 {
-    private Transform cameraTransform;
-
-    private void Awake()
+    private void Start()
     {
-        if (Camera.main != null)
-        {
-            cameraTransform = Camera.main.transform;
-        }
-    }
+        if (Camera.main == null) return;
 
-    private void LateUpdate()
-    {
-        if (cameraTransform != null)
+        RotationConstraint constraint = gameObject.GetComponent<RotationConstraint>();
+        if (constraint == null)
         {
-            transform.rotation = cameraTransform.rotation;
+            constraint = gameObject.AddComponent<RotationConstraint>();
         }
+
+        ConstraintSource source = new ConstraintSource();
+        source.sourceTransform = Camera.main.transform;
+        source.weight = 1f;
+
+        constraint.AddSource(source);
+        constraint.constraintActive = true;
+
+        Destroy(this);
     }
 }

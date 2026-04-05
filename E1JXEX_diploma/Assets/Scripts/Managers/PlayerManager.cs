@@ -25,10 +25,33 @@ public class PlayerManager : MonoBehaviour
     public float speedPenalty;
     public float baseSpeedPenalty = 0.25f;
 
-    public int currentHealth;
-    public float currentSpeed;
-    public float currentStamina;
+    private int _currentHealth;
 
+    public int CurrentHealth
+    {
+        get { return _currentHealth; }
+        set 
+        {
+            _currentHealth = value;
+            OnHealthChanged?.Invoke(_currentHealth);
+        }
+    }
+
+    public float currentSpeed;
+    private float _currentStamina;
+
+    public float CurrentStamina
+    {
+        get { return _currentStamina; }
+        set 
+        {
+            _currentStamina = value;
+            OnStaminaChanged?.Invoke(_currentStamina);
+        }
+    }
+
+    public event Action<int> OnHealthChanged;
+    public event Action<float> OnStaminaChanged;
     public bool isRunning = false;
     public bool staminaDrained;
     public bool sprintToggle;
@@ -64,13 +87,14 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
         currentSpeed = baseSpeed;
-        currentStamina = maxStamina;
+        CurrentStamina = maxStamina;
         currentDrillHead = availableDrillHeads[0];
         speedPenalty = baseSpeedPenalty;
         InputManager.instance.input.Player.BuildToggle.performed += HandleBuilding;
         InputManager.instance.input.Player.UpgradeToggle.performed += ToggleUpgradeMenu;
+        
     }
 
     private void ToggleUpgradeMenu(InputAction.CallbackContext context)
@@ -96,11 +120,11 @@ public class PlayerManager : MonoBehaviour
 
     public void HandleStamina(bool isMoving)
     {
-        if (sprintToggle && isMoving && currentStamina > 0 && !staminaDrained)
+        if (sprintToggle && isMoving && CurrentStamina > 0 && !staminaDrained)
         {
             isRunning = true;
-            currentStamina -= staminaDrainRate * Time.deltaTime;
-            if (currentStamina < 0.1f)
+            CurrentStamina -= staminaDrainRate * Time.deltaTime;
+            if (CurrentStamina < 0.1f)
             {
                 staminaDrained = true;
                 isRunning = false;
@@ -110,17 +134,17 @@ public class PlayerManager : MonoBehaviour
         else
         {
             isRunning = false;
-            if (currentStamina < maxStamina)
+            if (CurrentStamina < maxStamina)
             {
-                currentStamina += staminaRegenRate * Time.deltaTime;
-                if (currentStamina > maxStamina / 2)
+                CurrentStamina += staminaRegenRate * Time.deltaTime;
+                if (CurrentStamina > maxStamina / 2)
                 {
                     staminaDrained = false;
                 }
             }
         }
 
-        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+        CurrentStamina = Mathf.Clamp(CurrentStamina, 0, maxStamina);
     }
 
     public void EquipUpgrade(UpgradePlace place, MechUpgrade upgrade)
@@ -156,8 +180,8 @@ public class PlayerManager : MonoBehaviour
         ApplyModifiers(armUpgrade);
         ApplyModifiers(legUpgrade);
 
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+        CurrentStamina = Mathf.Clamp(CurrentStamina, 0, maxStamina);
         currentSpeed = baseSpeed;
         OnStatsUpdated?.Invoke();
     }

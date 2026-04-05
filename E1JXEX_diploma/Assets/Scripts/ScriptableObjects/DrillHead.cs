@@ -1,10 +1,4 @@
 using UnityEngine;
-public enum DrillType
-{
-    auto,
-    semi,
-    shotgun
-}
 
 [CreateAssetMenu(fileName = "NewDrillHead", menuName = "Tools/new DrillHead")]
 public class DrillHead : ScriptableObject
