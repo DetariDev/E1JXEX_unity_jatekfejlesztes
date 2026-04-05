@@ -2,7 +2,6 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VInspector.Libs;
 
 public class PlayerInterface : MonoBehaviour
 {
@@ -23,7 +22,7 @@ public class PlayerInterface : MonoBehaviour
 
     private void UpdateHealthBar(int obj)
     {
-        healthBar.fillAmount = (playerManager.CurrentHealth).ToFloat() / playerManager.maxHealth;
+        healthBar.fillAmount = (float)playerManager.CurrentHealth / playerManager.maxHealth;
     }
 
 }

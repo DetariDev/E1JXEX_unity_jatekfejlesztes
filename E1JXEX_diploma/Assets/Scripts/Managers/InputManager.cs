@@ -1,11 +1,9 @@
 using UnityEngine;
-using VInspector;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager instance { get; private set; }
 
-    [Foldout("Input példány")]
     public InputSystemActions input;
 
     public bool isGamepadMode = false;

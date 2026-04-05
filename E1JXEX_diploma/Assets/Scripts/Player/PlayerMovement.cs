@@ -15,6 +15,13 @@ public class PlayerMovement : MonoBehaviour
         }
         playerManager.HandleStamina(moveInput.magnitude > 0.1f);
 
+        if (TutorialManager.instance.currentStage == TutorialStage.Movement)
+        {
+            if (moveInput.magnitude > 0.1f)
+            {
+                TutorialManager.instance.NextStage();
+            }
+        }
         Move();
     }
 

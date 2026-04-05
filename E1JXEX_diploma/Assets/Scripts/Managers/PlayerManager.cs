@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using VInspector;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -94,7 +93,11 @@ public class PlayerManager : MonoBehaviour
         speedPenalty = baseSpeedPenalty;
         InputManager.instance.input.Player.BuildToggle.performed += HandleBuilding;
         InputManager.instance.input.Player.UpgradeToggle.performed += ToggleUpgradeMenu;
-        
+        if (TutorialManager.instance.currentStage == TutorialStage.None)
+        {
+            TutorialManager.instance.NextStage();
+        }
+
     }
 
     private void ToggleUpgradeMenu(InputAction.CallbackContext context)

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VInspector.Libs;
 
 [Serializable]
 public class BaseUpgradeTier
@@ -50,7 +49,7 @@ public class MainBase : MonoBehaviour
             if (baseHealth.currentHealth < baseHealth.maxHealth)
             {
                 baseHealth.Heal(1);
-                healthBar.fillAmount = (baseHealth.currentHealth).ToFloat() / baseHealth.maxHealth;
+                healthBar.fillAmount =(float)baseHealth.currentHealth/ baseHealth.maxHealth;
             }
 
             yield return new WaitForSeconds(baseHealth.healTime);
@@ -99,6 +98,10 @@ public class MainBase : MonoBehaviour
         baseHealth.maxHealth = nextTier.maxHealth;
         OnBaseLeveledUp?.Invoke();
         ResourceTextUpdate();
+        if (TutorialManager.instance.currentStage == TutorialStage.UpgradeBase)
+        {
+            TutorialManager.instance.NextStage();
+        }
         if (nextTier.upgradeVisuals != null)
         {
             baseVisual.SetActive(false);
@@ -134,4 +137,22 @@ public class MainBase : MonoBehaviour
             carrier.DeliverResources();
         }
     }
+
+    public void BaseEnclosed()
+    {
+        if (TutorialManager.instance == null || TutorialManager.instance.currentStage != TutorialStage.BuildWall)
+            return;
+
+        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
+        Vector3 distantPoint = transform.position + new Vector3(125f, 0f, 125f);
+        if (UnityEngine.AI.NavMesh.SamplePosition(distantPoint, out UnityEngine.AI.NavMeshHit hit, 15f, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            UnityEngine.AI.NavMesh.CalculatePath(transform.position, hit.position, UnityEngine.AI.NavMesh.AllAreas, path);
+            if (path.status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
+            {
+                TutorialManager.instance.NextStage();
+            }
+        }
+    }
+
 }

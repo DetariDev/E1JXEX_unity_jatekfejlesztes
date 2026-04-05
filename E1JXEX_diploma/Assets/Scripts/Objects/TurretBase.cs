@@ -18,6 +18,10 @@ public class TurretBase : MonoBehaviour
     {
         shootingComponent = GetComponent<Shooting>();
         spendPowerCoroutine = StartCoroutine(SpendPower());
+        if (TutorialManager.instance.currentStage == TutorialStage.UseTurret)
+        {
+            TutorialManager.instance.NextStage();
+        }
     }
 
     

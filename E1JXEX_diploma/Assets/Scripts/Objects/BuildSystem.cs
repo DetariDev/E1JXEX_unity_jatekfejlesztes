@@ -99,6 +99,6 @@ public class BuildSystem : MonoBehaviour
         GameObject newBuilding = Instantiate(currentBuildingRecipe.buildingPrefab, snapPos, Quaternion.identity);
         newBuilding.tag = "Building";
         occupiedPositions.Add(snapPos);
-
+        MainBase.Instance.BaseEnclosed();
     }
 }

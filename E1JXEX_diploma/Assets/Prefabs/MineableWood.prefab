@@ -184,7 +184,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -203,8 +203,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mineable
   resourceType: 0
-  resourceAmount: 50
-  maxResourceAmount: 50
+  maxDurability: 100
+  nest: 0
+  yieldAmount: 3
   chunkPrefab: {fileID: 57239075845072084, guid: 896acf1d716970444a598b7767900514, type: 3}
   typeText: {fileID: 2920827413010262027}
   countBar: {fileID: 1820870417611448978}
@@ -225,7 +226,7 @@ MonoBehaviour:
   m_Area: 0
   m_OverrideGenerateLinks: 0
   m_GenerateLinks: 0
-  m_IgnoreFromBuild: 0
+  m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
 --- !u!1 &4248843723091383228
@@ -567,7 +568,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -409502043181198388, guid: 04054a3651be51d4193414f850cf6bde, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

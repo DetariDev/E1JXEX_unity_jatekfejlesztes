@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
-using VInspector;
-using VInspector.Libs;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -12,7 +10,6 @@ public class WeaponManager : MonoBehaviour
 
 
 
-    [Foldout("Fegyver")]
     public List<Weapon> availableWeapons = new List<Weapon>();
     public List<WeaponRecipe> weaponRecipes = new List<WeaponRecipe>();
     public Weapon currentWeapon;

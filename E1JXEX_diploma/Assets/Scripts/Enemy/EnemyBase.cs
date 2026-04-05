@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using VInspector;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public enum EnemyState
 {
@@ -103,6 +101,10 @@ public class EnemyBase : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (TutorialManager.instance.currentStage == TutorialStage.KillEnemy)
+        {
+            TutorialManager.instance.NextStage();
+        }
         EnemyManager.instance.enemies.Remove(this);
     }
     private void OnEnable()

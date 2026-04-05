@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using VInspector;
 public enum ResourceType
 {
     Wood,
@@ -46,6 +45,10 @@ public class ResourceManager : MonoBehaviour
     {
         resources[resource] += quantity;
         OnResourceChanged?.Invoke(ResourceChanged());
+        if (TutorialManager.instance.currentStage== TutorialStage.CarrytoBase)
+        {
+            TutorialManager.instance.NextStage();
+        }
 
     }
     public bool SpendResource(ResourceType resource, int quantity)
@@ -89,6 +92,11 @@ public class ResourceManager : MonoBehaviour
         else
         {
             power += plusPower;
+        }
+
+        if (TutorialManager.instance.currentStage== TutorialStage.MakeEnergy)
+        {
+            TutorialManager.instance.NextStage();
         }
     }
     public bool SpendPower(int spentPower)
