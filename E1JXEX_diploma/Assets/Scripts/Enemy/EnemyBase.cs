@@ -28,6 +28,8 @@ public class EnemyBase : MonoBehaviour
     public EnemyState currentState = EnemyState.Idle;
     NavMeshAgent agent;
     private GameObject target;
+
+    public GameObject deathParticles;
     
 
     public GameObject Target
@@ -101,6 +103,7 @@ public class EnemyBase : MonoBehaviour
 
     private void OnDestroy()
     {
+        Destroy(Instantiate(deathParticles, transform.position, Quaternion.identity,null),0.5f);
         if (TutorialManager.instance.currentStage == TutorialStage.KillEnemy)
         {
             TutorialManager.instance.NextStage();

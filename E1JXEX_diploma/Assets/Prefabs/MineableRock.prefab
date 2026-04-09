@@ -429,10 +429,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mineable
   resourceType: 1
   maxDurability: 100
+  nest: 0
   yieldAmount: 3
   chunkPrefab: {fileID: 550621885735795161, guid: 26dc16246b628294c98e529c65f826dd, type: 3}
   typeText: {fileID: 2920827413010262027}
   countBar: {fileID: 1820870417611448978}
+  destroyParticle: {fileID: 6680280976031498515, guid: 01929eb6db4ef0343ab209e892a2090b, type: 3}
 --- !u!114 &7210749815657724621
 MonoBehaviour:
   m_ObjectHideFlags: 0

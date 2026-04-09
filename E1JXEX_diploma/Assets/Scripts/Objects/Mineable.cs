@@ -13,6 +13,7 @@ public class Mineable : MonoBehaviour
 
     public TMP_Text typeText;
     public Image countBar;
+    public GameObject destroyParticle;
 
     void Start()
     {
@@ -50,6 +51,7 @@ public class Mineable : MonoBehaviour
             chunk.resourceType = this.resourceType;
             chunk.amount = 1;
         }
+        Destroy(Instantiate(destroyParticle, transform.position, Quaternion.identity,null), 1f);
         Destroy(gameObject);
     }
 }
