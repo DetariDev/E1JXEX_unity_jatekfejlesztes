@@ -14,7 +14,7 @@ public class TurretBase : MonoBehaviour
     private Coroutine spendPowerCoroutine;
     private bool hasPower = false;
 
-    private void Awake()
+    private void Start()
     {
         shootingComponent = GetComponent<Shooting>();
         spendPowerCoroutine = StartCoroutine(SpendPower());

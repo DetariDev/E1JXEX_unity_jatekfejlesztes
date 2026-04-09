@@ -103,12 +103,19 @@ public class EnemyBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        Destroy(Instantiate(deathParticles, transform.position, Quaternion.identity,null),0.5f);
-        if (TutorialManager.instance.currentStage == TutorialStage.KillEnemy)
+        if (deathParticles!= null)
+        {
+            Destroy(Instantiate(deathParticles, transform.position, Quaternion.identity, null), 0.5f);
+        }
+        if (TutorialManager.instance != null && TutorialManager.instance.currentStage == TutorialStage.KillEnemy)
         {
             TutorialManager.instance.NextStage();
         }
-        EnemyManager.instance.enemies.Remove(this);
+        if (EnemyManager.instance != null)
+        {
+            EnemyManager.instance.enemies.Remove(this);
+        }
+        
     }
     private void OnEnable()
     {
@@ -180,7 +187,7 @@ public class EnemyBase : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Player") || hit.CompareTag("Building"))
+            if (hit.CompareTag("Player") || hit.CompareTag("Building") || hit.CompareTag("Wall"))
             {
                 
                 float currentDistance = Vector3.Distance(transform.position, hit.transform.position);

@@ -44,7 +44,7 @@ public class ResourceManager : MonoBehaviour
     {
         resources[resource] += quantity;
         OnResourceChanged?.Invoke(ResourceChanged());
-        if (TutorialManager.instance.currentStage== TutorialStage.CarrytoBase)
+        if (TutorialManager.instance!= null && TutorialManager.instance.currentStage== TutorialStage.CarrytoBase)
         {
             TutorialManager.instance.NextStage();
         }

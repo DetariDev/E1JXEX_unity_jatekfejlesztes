@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
     public List<GameObject> enemyPrefabs = new List<GameObject>();
-    public List<EnemyBase> enemies;
+    public List<EnemyBase> enemies = new List<EnemyBase>();
     public List<GameObject> nests = new List<GameObject>();
     public List<GameObject> randomPlaces = new List<GameObject>();
     public int maxEnemies = 20;
