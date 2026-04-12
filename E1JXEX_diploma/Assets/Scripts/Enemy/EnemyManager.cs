@@ -11,8 +11,9 @@ public class EnemyManager : MonoBehaviour
     public List<EnemyBase> enemies = new List<EnemyBase>();
     public List<GameObject> nests = new List<GameObject>();
     public List<GameObject> randomPlaces = new List<GameObject>();
-    public int maxEnemies = 20;
-    public int spawntime = 60;
+    public int enemySpawnCount;
+    public int maxEnemyCount = 50;
+    public int spawntime;
     public int radius = 10;
     private Coroutine spawnCoroutine;
 
@@ -38,23 +39,29 @@ public class EnemyManager : MonoBehaviour
     {
         while (true)
         {
-            nests.RemoveAll(nest => nest == null);
-            foreach(GameObject baseplace in nests)
+            nests.RemoveAll(nest => nest == null); 
+            if (enemyPrefabs.Count > maxEnemyCount)
             {
-                
-                for (int i = 0; i < maxEnemies; i++)
+                yield return new WaitForSeconds(spawntime);
+            }
+            else
+            {
+                foreach (GameObject baseplace in nests)
                 {
-                    Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)],new Vector3(baseplace.transform.position.x+UnityEngine.Random.Range(-radius,radius),0, baseplace.transform.position.z + UnityEngine.Random.Range(-radius, radius)),Quaternion.identity,null);
-                }
-            }
-            foreach(GameObject randomplace in randomPlaces)
-            {
-                Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)], randomplace.transform.position,Quaternion.identity, null);
 
+                    for (int i = 0; i < enemySpawnCount; i++)
+                    {
+                        Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)], new Vector3(baseplace.transform.position.x + UnityEngine.Random.Range(-radius, radius), 0, baseplace.transform.position.z + UnityEngine.Random.Range(-radius, radius)), Quaternion.identity, null);
+                    }
+                }
+                foreach (GameObject randomplace in randomPlaces)
+                {
+                    Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)], randomplace.transform.position, Quaternion.identity, null);
+
+                }
+                yield return new WaitForSeconds(spawntime);
             }
-            spawntime = UnityEngine.Random.Range(60, 90);
-            maxEnemies += 10;
-            yield return new WaitForSeconds(spawntime);
+            
         }
     }
 

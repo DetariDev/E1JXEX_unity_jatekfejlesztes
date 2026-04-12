@@ -1530,6 +1530,7 @@ MonoBehaviour:
   chunkPrefab: {fileID: 57239075845072084, guid: 896acf1d716970444a598b7767900514, type: 3}
   typeText: {fileID: 6323307670468149287}
   countBar: {fileID: 1681965650896697343}
+  destroyParticle: {fileID: 6680280976031498515, guid: 01929eb6db4ef0343ab209e892a2090b, type: 3}
 --- !u!65 &7062182400382383957
 BoxCollider:
   m_ObjectHideFlags: 0

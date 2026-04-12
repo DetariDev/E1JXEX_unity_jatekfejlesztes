@@ -460,12 +460,12 @@ MonoBehaviour:
   maxHealth: 250
   speed: 2.5
   attackRange: 2
+  maxchaseRange: 35
   attackRate: 1
   damage: 20
   detectRange: 6
   currentState: 0
-  target: {fileID: 0}
-  findTargetInterval: 0.5
+  deathParticles: {fileID: 6726706241782394290, guid: 793d8bcce2815864d8e74bc73e7b25ad, type: 3}
 --- !u!195 &7605780363521202462
 NavMeshAgent:
   m_ObjectHideFlags: 0

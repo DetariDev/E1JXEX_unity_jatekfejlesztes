@@ -14,6 +14,7 @@ public class Mineable : MonoBehaviour
     public TMP_Text typeText;
     public Image countBar;
     public GameObject destroyParticle;
+    public bool bigMine = false;
 
     void Start()
     {
@@ -52,6 +53,14 @@ public class Mineable : MonoBehaviour
             chunk.amount = 1;
         }
         Destroy(Instantiate(destroyParticle, transform.position, Quaternion.identity,null), 1f);
-        Destroy(gameObject);
+        if (bigMine)
+        {
+            currentDurability = maxDurability;
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

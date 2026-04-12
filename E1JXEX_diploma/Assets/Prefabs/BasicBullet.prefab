@@ -157,6 +157,7 @@ MonoBehaviour:
   damage: 0
   bulletType: 0
   owner: {fileID: 0}
+  hitEffect: {fileID: 4181517171812955471, guid: beca6325726f0a5489445c52b1f5996a, type: 3}
 --- !u!1 &3383925524618484951
 GameObject:
   m_ObjectHideFlags: 0
