@@ -47,6 +47,7 @@ public class PlayerCarrier : MonoBehaviour
                 ApplyWeightPenalty();
             }
         }
+        
     }
 
     public void DropTopChunk()
@@ -71,6 +72,11 @@ public class PlayerCarrier : MonoBehaviour
     {
         float penaltyMultiplier = Mathf.Max(0f, 1f - (carriedChunks.Count * PlayerManager.Instance.speedPenalty));
         PlayerManager.Instance.currentSpeed = PlayerManager.Instance.baseSpeed * penaltyMultiplier;
+        if (TutorialManager.instance != null)
+        {
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Pickup, carriedChunks.Count < carrySlots.Length);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Drop, carriedChunks.Count > 0);
+        }
     }
 
     public void DeliverResources()

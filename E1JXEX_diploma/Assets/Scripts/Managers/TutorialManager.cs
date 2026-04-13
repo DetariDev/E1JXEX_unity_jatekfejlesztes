@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -17,17 +18,54 @@ public enum TutorialStage
     KillNest
 }
 
+public enum KeyHint
+{
+    WASD,
+    Shoot,
+    Mine,
+    Pickup,
+    Drop,
+    Build,
+    Menu,
+    QuitMenu,
+    Changeweapon
+}
+
 public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager instance;
     public TutorialStage currentStage = TutorialStage.None;
     public TMP_Text tutorialText;
+    public TMP_Text keyHintText;
 
+    public Dictionary<KeyHint, bool> keyHints = new Dictionary<KeyHint, bool>();
 
     void Awake()
     {
         if (instance != null && instance != this) Destroy(gameObject);
         else instance = this;
+    }
+
+    public void InitializeKeyHints()
+    {
+        foreach (KeyHint hint in System.Enum.GetValues(typeof(KeyHint)))
+        {
+            if (hint == KeyHint.WASD || hint == KeyHint.Shoot || hint == KeyHint.Mine || hint == KeyHint.Menu || hint == KeyHint.Build)
+            {
+                keyHints[hint] = true;
+            }
+            else
+            {
+                keyHints[hint] = false;
+            }
+            
+        }
+
+    }
+    void Start()
+    {
+        InitializeKeyHints();
+        UpdateKeyHintText();
     }
 
     public void SetTutorialStage(TutorialStage stage)
@@ -78,5 +116,55 @@ public class TutorialManager : MonoBehaviour
         SetTutorialStage(currentStage + 1);
     }
 
+    public void ToggleKeyHint(KeyHint hint, bool show)
+    {
+        if (!keyHints.ContainsKey(hint) || keyHints[hint] != show)
+        {
+            keyHints[hint] = show;
+            UpdateKeyHintText();
+        }
+    }
 
+    private void UpdateKeyHintText()
+    {
+        keyHintText.text = "";
+
+        foreach (var hint in keyHints) 
+        {
+            if (!hint.Value) continue;
+            switch (hint.Key)
+            {
+                case KeyHint.WASD:
+                    keyHintText.text += "Move: WASD\n";
+                    break;
+                case KeyHint.Shoot:
+                    keyHintText.text += "Shoot: Left Mouse Button\n";
+                    break;
+                case KeyHint.Mine:
+                    keyHintText.text += "Mine: Right Mouse Button\n";
+                    break;
+                case KeyHint.Pickup:
+                    keyHintText.text += "Pickup: E\n";
+                    break;
+                case KeyHint.Drop:
+                    keyHintText.text += "Drop: Q\n";
+                    break;
+                case KeyHint.Build:
+                    keyHintText.text += "Build mode: F\n";
+                    break;
+                case KeyHint.Menu:
+                    keyHintText.text += "Open Menu: TAB\n";
+                    break;
+                case KeyHint.QuitMenu:
+                    keyHintText.text += "Close Menu: TAB\n";
+                    break;
+                case KeyHint.Changeweapon:
+                    keyHintText.text += "Change Weapon: Mouse Scroll\n";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
 }

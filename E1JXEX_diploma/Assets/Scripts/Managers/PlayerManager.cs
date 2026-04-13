@@ -105,6 +105,16 @@ public class PlayerManager : MonoBehaviour
         OnMenuToggle?.Invoke(inMenu);
         inBuildState = false;
         OnBuildStateToggle?.Invoke(inBuildState);
+        if(TutorialManager.instance != null)
+        {
+            TutorialManager.instance.ToggleKeyHint(KeyHint.QuitMenu, inMenu);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Menu, !inMenu);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.WASD, !inMenu);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Shoot, !inMenu);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Mine, !inMenu);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Pickup, !inMenu);
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Changeweapon, !inMenu);
+        }
     }
 
     public void HandleBuilding(InputAction.CallbackContext context)
@@ -112,10 +122,15 @@ public class PlayerManager : MonoBehaviour
         if (inMenu)
         {
             inBuildState = false;
+            if (TutorialManager.instance != null)
+            {
+                TutorialManager.instance.ToggleKeyHint(KeyHint.Menu, !inMenu);
+            }
         }
-        else
+        inBuildState = !inBuildState;
+        if (TutorialManager.instance != null)
         {
-            inBuildState = !inBuildState;
+            TutorialManager.instance.ToggleKeyHint(KeyHint.Build, !inBuildState);
         }
         OnBuildStateToggle?.Invoke(inBuildState);
     }
