@@ -78,7 +78,10 @@ public class EnemyBase : MonoBehaviour
 
                 if (agent.isOnNavMesh && agent.isActiveAndEnabled)
                 {
-                    agent.SetDestination(Target.transform.position);
+                    if (Vector3.Distance(agent.destination, Target.transform.position) > 1.0f)
+                    {
+                        agent.SetDestination(Target.transform.position);
+                    }
 
                     if (!agent.pathPending && agent.pathStatus == NavMeshPathStatus.PathPartial)
                     {

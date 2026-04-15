@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingRecipe
   resourceCost:
   - resourceType: 1
-    amount: 0
-  minBaseLevel: 0
+    amount: 1
+  - resourceType: 0
+    amount: 2
+  minBaseLevel: 1
   buildingName: Small Turret
   buildingPrefab: {fileID: 8060693006757567799, guid: 5c4b50393a821b343a4fe18fcdcb7446, type: 3}

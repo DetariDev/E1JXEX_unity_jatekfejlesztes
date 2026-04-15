@@ -14,8 +14,8 @@ public enum TutorialStage
     KillEnemy,
     UseTurret,
     MakeEnergy,
-    UseAutominer,
-    KillNest
+    KillNest,
+    final
 }
 
 public enum KeyHint
@@ -103,11 +103,11 @@ public class TutorialManager : MonoBehaviour
             case TutorialStage.MakeEnergy:
                 tutorialText.text = "Generate energy by building energy generators and connecting them to your base.";
                 break;
-            case TutorialStage.UseAutominer:
-                tutorialText.text = "Use autominers to automatically mine resources for you.";
-                break;
             case TutorialStage.KillNest:
                 tutorialText.text = "Destroy enemy nests to stop them from spawning more enemies.";
+                break;
+            case TutorialStage.final:
+                tutorialText.text = "Good luck! Make a strong character and base!";
                 break;
         }
     }

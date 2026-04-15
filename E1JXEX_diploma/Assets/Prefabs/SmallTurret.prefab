@@ -869,7 +869,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c269a7555d1a640a44027a50e60f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectHealth
+  isBase: 0
+  currentHealth: 0
   maxHealth: 100
+  amount: 10
+  combatDelay: 15
 --- !u!208 &627918163585604958
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -925,7 +929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900d5c7f0513b8d4ab07a9b87712deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurretBase
-  powerCost: 0
+  powerCost: 1
   turretWeapon: {fileID: 11400000, guid: 5a7354adfaf08e943aae0fee077372a1, type: 2}
 --- !u!114 &1746995694535845864
 MonoBehaviour:

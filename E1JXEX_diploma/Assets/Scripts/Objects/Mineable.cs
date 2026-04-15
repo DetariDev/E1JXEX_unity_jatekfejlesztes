@@ -43,24 +43,37 @@ public class Mineable : MonoBehaviour
 
     private void BreakAndDrop()
     {
-        for (int i = 0; i < yieldAmount; i++)
+        if (nest)
         {
-            Vector3 dropPos = transform.position + new Vector3(Random.Range(-1f, 1f), 1f, Random.Range(-1f, 1f));
-            GameObject chunkObj = Instantiate(chunkPrefab, dropPos, Quaternion.identity);
-
-            ResourceChunk chunk = chunkObj.GetComponent<ResourceChunk>();
-            chunk.resourceType = this.resourceType;
-            chunk.amount = 1;
-        }
-        Destroy(Instantiate(destroyParticle, transform.position, Quaternion.identity,null), 1f);
-        if (bigMine)
-        {
-            currentDurability = maxDurability;
-
+            if (TutorialManager.instance.currentStage == TutorialStage.KillNest)
+            {
+                TutorialManager.instance.NextStage();
+            }
+            Destroy(Instantiate(destroyParticle, transform.position, Quaternion.identity, null), 1f);
+            Destroy(gameObject);
         }
         else
         {
-            Destroy(gameObject);
+            for (int i = 0; i < yieldAmount; i++)
+            {
+                Vector3 dropPos = transform.position + new Vector3(Random.Range(-1f, 1f), 1f, Random.Range(-1f, 1f));
+                GameObject chunkObj = Instantiate(chunkPrefab, dropPos, Quaternion.identity);
+
+                ResourceChunk chunk = chunkObj.GetComponent<ResourceChunk>();
+                chunk.resourceType = this.resourceType;
+                chunk.amount = 1;
+            }
+            Destroy(Instantiate(destroyParticle, transform.position, Quaternion.identity, null), 1f);
+            if (bigMine)
+            {
+                currentDurability = maxDurability;
+
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
+        
     }
 }

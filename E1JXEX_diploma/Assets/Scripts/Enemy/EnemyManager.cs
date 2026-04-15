@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     public List<EnemyBase> enemies = new List<EnemyBase>();
     public List<GameObject> nests = new List<GameObject>();
     public List<GameObject> randomPlaces = new List<GameObject>();
+    public float randomprobability = 2;
     public int enemySpawnCount;
     public int maxEnemyCount = 50;
     public int spawntime;
@@ -39,7 +40,8 @@ public class EnemyManager : MonoBehaviour
     {
         while (true)
         {
-            nests.RemoveAll(nest => nest == null); 
+            nests.RemoveAll(nest => nest == null);
+            randomPlaces.RemoveAll(x => x == null);
             if (enemyPrefabs.Count > maxEnemyCount)
             {
                 yield return new WaitForSeconds(spawntime);
@@ -56,7 +58,10 @@ public class EnemyManager : MonoBehaviour
                 }
                 foreach (GameObject randomplace in randomPlaces)
                 {
-                    Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)], randomplace.transform.position, Quaternion.identity, null);
+                    if (UnityEngine.Random.Range(0, 100) < randomprobability)
+                    {
+                        Instantiate(enemyPrefabs[UnityEngine.Random.Range(0, enemyPrefabs.Count)], randomplace.transform.position, Quaternion.identity, null);
+                    }
 
                 }
                 yield return new WaitForSeconds(spawntime);

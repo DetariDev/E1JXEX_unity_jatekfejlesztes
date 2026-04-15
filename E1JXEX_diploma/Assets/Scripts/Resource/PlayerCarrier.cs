@@ -35,6 +35,7 @@ public class PlayerCarrier : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, pickupRadius, chunkLayer);
         foreach (var hit in hits)
         {
+            if (Mathf.Max(0f, 1f - ((carriedChunks.Count + 1) * PlayerManager.Instance.speedPenalty)) <= 0.1f) break;
             if (carriedChunks.Count >= carrySlots.Length) break;
 
             if (hit.TryGetComponent(out ResourceChunk chunk))

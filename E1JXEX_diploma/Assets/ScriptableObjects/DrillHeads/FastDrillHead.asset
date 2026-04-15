@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b8ceba9dd35bc45addbdc17e1c06a2, type: 3}
   m_Name: FastDrillHead
   m_EditorClassIdentifier: Assembly-CSharp::DrillHead
-  mineableResources: 0000000001000000
+  mineableResources: 000000000100000002000000
   miningRate: 20
   miningAmount: 2
-  range: 4
+  range: 6

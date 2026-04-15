@@ -2132,9 +2132,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c269a7555d1a640a44027a50e60f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectHealth
+  isBase: 0
   currentHealth: 0
   maxHealth: 100
-  healTime: 1
+  amount: 10
+  combatDelay: 15
 --- !u!208 &627918163585604958
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2190,4 +2192,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb05dcec3889efa48b560f5909fc9011, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindTurbine
-  generationAmount: 1
+  generationAmount: 2

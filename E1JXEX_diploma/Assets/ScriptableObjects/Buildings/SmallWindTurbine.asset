@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SmallWindTurbine
   m_EditorClassIdentifier: Assembly-CSharp::BuildingRecipe
   resourceCost:
-  - resourceType: 2
-    amount: 0
+  - resourceType: 0
+    amount: 3
   minBaseLevel: 0
   buildingName: Small WindTurbine
   buildingPrefab: {fileID: 8060693006757567799, guid: d1e53b36bad060d43b51ef3ad33da5d3, type: 3}
